@@ -5,15 +5,23 @@
 #include <stdbool.h>
 #include <string.h>
 
-int main() {
-	//bool debug = true;
-	// add protect field "PROTECT0"
+int main(int argc, char* argv[]) {
 	// safe call
 	// COMMAND CALL - function index
 	// COMMAND_REGISTER_FUNCTION - return type & arguments type -> push function index on stack
 
-	// Header start
 	FILE* fd = stdin;
+	if (argc > 1) {
+		FILE* f = fopen(argv[1], "r");
+		if (f == NULL) {
+			perror("Couldn't open file");
+			return -3;
+		}
+		fd = f;
+	}
+
+	// Header start
+
 	const char* protect_field = "PROTECT0";
 	char buffer[9] = {0};
 	int b = fread(buffer, 8, 1, fd);
@@ -24,6 +32,13 @@ int main() {
 	if (strcmp(buffer, protect_field) != 0) {
 		return -2;
 	}
+
+	// Switching?
+	// BE, LE test
+
+	// Switching?
+	// Different operand size (u64/u32)
+	// Diffrent floating-point operand size (f64/f32)
 
 	// Stack size in u64
 	// Number of std functions

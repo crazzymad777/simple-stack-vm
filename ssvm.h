@@ -36,8 +36,6 @@
 // free heap (pointer on stack)
 
 // LOAD DATA ON STACK
-// MALLOC
-// COPY DATA FROM STACK ON POINTER
 
 // Perfect:
 // MALLOC
