@@ -6,6 +6,10 @@
 
 int main() {
 	//bool debug = true;
+	// add protect field "PROTECT0"
+	// safe call
+	// COMMAND CALL - function index
+	// COMMAND_REGISTER_FUNCTION - return type & arguments type -> push function index on stack
 
 	struct vm_state vm;
 	uint64_t* stack = malloc(4096);
@@ -59,7 +63,20 @@ int main() {
                         } else if (c == COMMAND_REM) {
                                 *(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) % *vm.sp;
                                 vm.sp = vm.sp-sizeof(uint64_t);
-                        }
+                        } else if (c == COMMAND_BITWISE_AND) {
+                                *(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) & *vm.sp;
+                                vm.sp = vm.sp-sizeof(uint64_t);
+                        } else if (c == COMMAND_BITWISE_OR) {
+                                *(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) | *vm.sp;
+                                vm.sp = vm.sp-sizeof(uint64_t);
+                        } else if (c == COMMAND_BITWISE_XOR) {
+                                *(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) ^ *vm.sp;
+                                vm.sp = vm.sp-sizeof(uint64_t);
+                        } else if (c == COMMAND_CLONE) {
+				uint64_t cell = *vm.sp;
+				vm.sp += sizeof(uint64_t);
+				*vm.sp = cell;
+			}
 		}
 	}
 	free(stack);

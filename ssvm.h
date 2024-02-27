@@ -1,5 +1,5 @@
-#ifndef SMALLVM_H
-#define SMALLVM_H
+#ifndef SIMPLESTACKVM_H
+#define SIMPLESTACKVM_H
 
 #include <inttypes.h>
 
