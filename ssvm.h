@@ -58,6 +58,10 @@
 #define COMMAND_JUMP_IF_GREAT_OR_EQUAL 40 // jump if *sp > 0: jge
 #define COMMAND_JUMP_IF_LESS_OR_EQUAL 41 // jump if *sp < 0: jle
 
+#define COMMAND_RIGHT_SHIFT 42
+#define COMMAND_LEFT_SHIFT 43
+#define COMMAND_SWAP 44
+
 struct vm_state {
 	union {
 		uint64_t* sp; // stack pointer
