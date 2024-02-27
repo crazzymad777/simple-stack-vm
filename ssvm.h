@@ -72,6 +72,7 @@
 // 1 - dlerror - -> char*
 // 2 - dlsym - void* handle, char* symbol
 // 3 - dlclose - void* handle -> int
+// 4 - puts
 
 struct vm_state {
 	union {
