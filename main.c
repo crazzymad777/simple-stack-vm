@@ -70,7 +70,7 @@ int ssvm_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 		} else if (c == COMMAND_OMIT) {
 			vm.sp -= sizeof(uint64_t);
 		} else if (c == COMMAND_MALLOC) {
-			vm.sp = malloc(*vm.sp);
+			*vm.sp = malloc(*vm.sp);
 		} else if (c == COMMAND_FREE) {
 			free(vm.sp);
 			vm.sp = vm.sp-sizeof(uint64_t);
@@ -146,8 +146,16 @@ int ssvm_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 				*vm.sp_fn_ptr = dlsym;
 			} else if (*vm.sp == 3) {
 				*vm.sp_fn_ptr = dlclose;
+			} else if (*vm.sp == 4) {
+				*vm.sp_fn_ptr = puts;
 			} else {
 				*vm.sp = 0;
+			}
+		} else if (c == COMMAND_LOAD) {
+			uint64_t n;
+			int bytes = fread(&n, 8, 1, fd);
+			if (bytes == 1) {
+				fread((void*)*vm.sp, n, 1, fd);
 			}
 		} else if (c == COMMAND_CALL) {
 			*vm_ptr = vm;
@@ -157,7 +165,7 @@ int ssvm_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 			*vm_ptr = vm;
 			fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
 			return -5;
-		} else if (c == COMMAND_LOAD || (c >= COMMAND_JUMP_IF_ZERO && c <= COMMAND_JUMP_IF_LESS_OR_EQUAL)) {
+		} else if (c >= COMMAND_JUMP_IF_ZERO && c <= COMMAND_JUMP_IF_LESS_OR_EQUAL) {
 			*vm_ptr = vm;
 			fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
 			return -5;
@@ -184,7 +192,7 @@ int ssvm_call(struct vm_state vm, FILE* fd, void* stack) {
 int main(int argc, char* argv[]) {
 	FILE* fd = stdin;
 	if (argc > 1) {
-		FILE* f = fopen(argv[1], "r");
+		FILE* f = fopen(argv[1], "rb");
 		if (f == NULL) {
 			perror("Couldn't open file");
 			return -3;
