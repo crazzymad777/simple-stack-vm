@@ -191,7 +191,7 @@ int main(int argc, char* argv[]) {
 
 	struct vm_state vm;
 	uint64_t* stack = malloc(4096);
-	vm.operand_size = sizeof(uint64_t)
+	vm.operand_size = sizeof(uint64_t);
 	vm.sp = stack - vm.operand_size;
 	ssvm_call(vm, fd, stack);
 	free(stack);
