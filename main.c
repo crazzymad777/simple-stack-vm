@@ -114,6 +114,13 @@ int ssvm_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 			uint64_t value = *vm.sp;
 			*vm.sp = *(vm.sp-sizeof(uint64_t));
 			*(vm.sp-sizeof(uint64_t)) = value;
+		} else if (c == COMMAND_JUMP) {
+			long pos = ftell(fd) - 1;
+			uint64_t offset;
+			int bytes = fread(&offset, 8, 1, fd);
+			if (bytes == 1) {
+				fseek(fd, pos + offset, SEEK_SET);
+			}
 		} else if (c == COMMAND_CALL) {
 			*vm_ptr = vm;
 			fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
@@ -122,7 +129,7 @@ int ssvm_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 			*vm_ptr = vm;
 			fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
 			return -5;
-		} else if (c == COMMAND_LOAD || (c >= COMMAND_JUMP && c <= COMMAND_JUMP_IF_LESS_OR_EQUAL)) {
+		} else if (c == COMMAND_LOAD || (c >= COMMAND_JUMP_IF_ZERO && c <= COMMAND_JUMP_IF_LESS_OR_EQUAL)) {
 			*vm_ptr = vm;
 			fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
 			return -5;
