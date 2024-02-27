@@ -26,10 +26,12 @@ int main(int argc, char* argv[]) {
 	char buffer[9] = {0};
 	int b = fread(buffer, 8, 1, fd);
 	if (b < 1) {
+		fprintf(stderr, "Invalid header signature");
 		return -1;
 	}
 
 	if (strcmp(buffer, protect_field) != 0) {
+		fprintf(stderr, "Invalid header signature");
 		return -2;
 	}
 
@@ -132,11 +134,11 @@ int main(int argc, char* argv[]) {
 				} while(ptr != stack);
 
 			} else if (c == COMMAND_CALL || c == COMMAND_RET || c == COMMAND_FP_ADD || c == COMMAND_FP_SUB || c == COMMAND_FP_MUL || c == COMMAND_FP_DIV || c == COMMAND_FP_POWER || c == COMMAND_FP_CEIL || c == COMMAND_FP_ROUND || c == COMMAND_LOAD) {
-				printf("Error! Not implemented opcode: 0x%x\n", c);
+				fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
 				free(stack);
 				return -5;
 			} else {
-				printf("Error! Unknown opcode: 0x%x\n", c);
+				fprintf(stderr, "Error! Unknown opcode: 0x%x\n", c);
 				free(stack);
 				return -4;
 			}
