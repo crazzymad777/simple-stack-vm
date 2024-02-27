@@ -168,14 +168,6 @@ int ssvm_call(struct vm_state vm, FILE* fd, void* stack) {
 int main(int argc, char* argv[]) {
 	FILE* fd = stdin;
 	if (argc > 1) {
-		// Debug, default stack size, endiness, operand size, fp operand size, disable FFI, disable STD functions
-		// -d - debug
-		// -s size - stack size
-		// -e {be,le} - endiness
-		// -o {32/64} - operand size
-		// -f {32/64} - fp operand size
-		// -no-ffi - disable ffi
-		// -no-std - disable std
 		FILE* f = fopen(argv[1], "r");
 		if (f == NULL) {
 			perror("Couldn't open file");
@@ -183,8 +175,6 @@ int main(int argc, char* argv[]) {
 		}
 		fd = f;
 	}
-
-	// Header start
 
 	const char* protect_field = "PROTECT0";
 	char buffer[9] = {0};
@@ -199,23 +189,6 @@ int main(int argc, char* argv[]) {
 		return -2;
 	}
 
-	// Switching?
-	// BE, LE test
-	// 0xF0E0D0C0B1A29384
-
-	// Switching?
-	// Different operand size (u64/u32)
-	// Different floating-point operand size (f64/f32)
-
-	// Stack size in u64
-	// Number of std functions
-    // std function id
-	// Number of internal function
-	// offset in CODE section
-
-	// Header end
-	// CODE
-
 	struct vm_state vm;
 	uint64_t* stack = malloc(4096);
 	vm.operand_size = sizeof(uint64_t);
@@ -224,4 +197,3 @@ int main(int argc, char* argv[]) {
 	free(stack);
 	return 0;
 }
-
