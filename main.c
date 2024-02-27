@@ -4,6 +4,7 @@
 #include "ssvm.h"
 #include <stdbool.h>
 #include <string.h>
+#include <math.h>
 
 int main(int argc, char* argv[]) {
 	// safe call
@@ -85,6 +86,8 @@ int main(int argc, char* argv[]) {
 				}
 			} else if (c == COMMAND_PRINT) {
 				printf("%lx", *vm.sp);
+			} else if (c == COMMAND_PRINT_FP) {
+				printf("%lf", *((double*)vm.sp));
 			} else if (c == COMMAND_SEEK_SP) {
 				int64_t piece;
 				int bytes = fread(&piece, 8, 1, fd);
@@ -133,7 +136,31 @@ int main(int argc, char* argv[]) {
 					ptr -= sizeof(uint64_t);
 				} while(ptr != stack);
 
-			} else if (c == COMMAND_CALL || c == COMMAND_RET || c == COMMAND_FP_ADD || c == COMMAND_FP_SUB || c == COMMAND_FP_MUL || c == COMMAND_FP_DIV || c == COMMAND_FP_POWER || c == COMMAND_FP_CEIL || c == COMMAND_FP_ROUND || c == COMMAND_LOAD) {
+			} else if (c == COMMAND_FP_ADD) {
+				*(vm.sp_f64-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) + *vm.sp_f64;
+				vm.sp = vm.sp-sizeof(uint64_t);
+
+			} else if (c == COMMAND_FP_SUB) {
+				*(vm.sp_f64-sizeof(uint64_t)) = *(vm.sp_f64-sizeof(uint64_t)) - *vm.sp_f64;
+				vm.sp = vm.sp-sizeof(uint64_t);
+
+			} else if (c == COMMAND_FP_MUL) {
+				*(vm.sp_f64-sizeof(uint64_t)) = *(vm.sp_f64-sizeof(uint64_t)) * *vm.sp_f64;
+				vm.sp = vm.sp-sizeof(uint64_t);
+
+			} else if (c == COMMAND_FP_DIV) {
+				*(vm.sp_f64-sizeof(uint64_t)) = *(vm.sp_f64-sizeof(uint64_t)) / *vm.sp_f64;
+				vm.sp = vm.sp-sizeof(uint64_t);
+
+			} else if (c == COMMAND_FP_POWER) {
+				*(vm.sp_f64-sizeof(uint64_t)) = pow(*(vm.sp_f64-sizeof(uint64_t)), *vm.sp_f64);
+				vm.sp = vm.sp-sizeof(uint64_t);
+
+			} else if (c == COMMAND_FP_CEIL) {
+				*vm.sp_f64 = ceil(*vm.sp_f64);
+			} else if (c == COMMAND_FP_ROUND) {
+				*vm.sp_f64 = round(*vm.sp_f64);
+			} else if (c == COMMAND_CALL || c == COMMAND_RET || c == COMMAND_LOAD) {
 				fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
 				free(stack);
 				return -5;

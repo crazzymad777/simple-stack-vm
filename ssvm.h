@@ -67,9 +67,13 @@
 #define COMMAND_FREE 31 // *sp
 //#define COMMAND_OMIT 32
 #define COMMAND_PRINT_ALL 33
+#define COMMAND_PRINT_FP 34
 
 struct vm_state {
-	uint64_t* sp; // stack pointer
+	union {
+		uint64_t* sp; // stack pointer
+		double* sp_f64;
+	};
 };
 
 #endif
