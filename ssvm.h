@@ -66,6 +66,8 @@
 #define COMMAND_TO_FP_S 46 // signed
 #define COMMAND_TO_INTEGER 47 // convert floating point to integer
 
+#define COMMAND_CALL_C 48 // *sp - function pointer, *(sp-1) arguments pointer, *(sp-2) size of arguments
+
 struct vm_state {
 	union {
 		uint64_t* sp; // stack pointer
