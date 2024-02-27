@@ -66,6 +66,7 @@
 #define COMMAND_LOAD 30 // uint64 N, N bytes
 #define COMMAND_FREE 31 // *sp
 //#define COMMAND_OMIT 32
+#define COMMAND_PRINT_ALL 33
 
 struct vm_state {
 	uint64_t* sp; // stack pointer

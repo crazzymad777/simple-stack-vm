@@ -124,6 +124,13 @@ int main(int argc, char* argv[]) {
 			} else if (c == COMMAND_FREE) {
 				free(vm.sp);
 				vm.sp = vm.sp-sizeof(uint64_t);
+			} else if (c == COMMAND_PRINT_ALL) {
+				uint64_t *ptr = vm.sp;
+				do {
+					printf("0x%x: 0x%x\n", vm.sp-ptr, *ptr);
+					ptr -= sizeof(uint64_t);
+				} while(ptr != stack);
+
 			} else if (c == COMMAND_CALL || c == COMMAND_RET || c == COMMAND_FP_ADD || c == COMMAND_FP_SUB || c == COMMAND_FP_MUL || c == COMMAND_FP_DIV || c == COMMAND_FP_POWER || c == COMMAND_FP_CEIL || c == COMMAND_FP_ROUND || c == COMMAND_LOAD) {
 				printf("Error! Not implemented opcode: 0x%x\n", c);
 				free(stack);
