@@ -137,7 +137,7 @@ int main(int argc, char* argv[]) {
 				} while(ptr != stack);
 
 			} else if (c == COMMAND_FP_ADD) {
-				*(vm.sp_f64-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) + *vm.sp_f64;
+				*(vm.sp_f64-sizeof(uint64_t)) = *(vm.sp_f64-sizeof(uint64_t)) + *vm.sp_f64;
 				vm.sp = vm.sp-sizeof(uint64_t);
 
 			} else if (c == COMMAND_FP_SUB) {
