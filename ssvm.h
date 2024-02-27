@@ -47,6 +47,17 @@
 #define COMMAND_PRINT_ALL 33
 #define COMMAND_PRINT_FP 34
 
+// Jumps
+// Conditional jump
+
+#define COMMAND_JUMP 35 // non-conditional jump: jump {offset in bytes}
+#define COMMAND_JUMP_IF_ZERO 36 // jump if *sp = 0: je {offset in bytes}
+#define COMMAND_JUMP_IF_NON_ZERO 37 // jump if *sp != 0: jne {offset in bytes}
+#define COMMAND_JUMP_IF_GREAT 38 // jump if *sp > 0: jg
+#define COMMAND_JUMP_IF_LESS 39 // jump if *sp < 0: jl
+#define COMMAND_JUMP_IF_GREAT_OR_EQUAL 40 // jump if *sp > 0: jge
+#define COMMAND_JUMP_IF_LESS_OR_EQUAL 41 // jump if *sp < 0: jle
+
 struct vm_state {
 	union {
 		uint64_t* sp; // stack pointer

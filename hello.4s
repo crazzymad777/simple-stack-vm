@@ -1,3 +1,8 @@
 .stack 4096
 memory_load "Hello, world!\n" ; сокращение для malloc & load
 call 0 ; вывод строки
+
+pushf 0.0
+pushf 1.3
+fp_add
+fp_print

@@ -171,7 +171,7 @@ int main(int argc, char* argv[]) {
 				*vm.sp_f64 = round(*vm.sp_f64);
 			} else if (c == COMMAND_TAKE) {
 				*vm.sp = **vm.sp_ptr;
-			} else if (c == COMMAND_CALL || c == COMMAND_RET || c == COMMAND_LOAD) {
+			} else if (c == COMMAND_CALL || c == COMMAND_RET || c == COMMAND_LOAD || c == COMMAND_JUMP) {
 				fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
 				free(stack);
 				return -5;
