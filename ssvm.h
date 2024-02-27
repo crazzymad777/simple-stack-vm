@@ -27,6 +27,21 @@
 
 // sysv-amd64 call
 
+// float-pointing values
+
+
+// load N {u64 n times}
+// save N {u64 n times} in (*sp)
+// malloc size (return pointer on stack)
+// free heap (pointer on stack)
+
+// LOAD DATA ON STACK
+// MALLOC
+// COPY DATA FROM STACK ON POINTER
+
+// Perfect:
+// MALLOC
+// LOAD DATA BY POINTER
 
 struct vm_state {
 	uint64_t* sp; // stack pointer

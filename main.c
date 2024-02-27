@@ -3,6 +3,7 @@
 #include <inttypes.h>
 #include "ssvm.h"
 #include <stdbool.h>
+#include <string.h>
 
 int main() {
 	//bool debug = true;
@@ -11,10 +12,35 @@ int main() {
 	// COMMAND CALL - function index
 	// COMMAND_REGISTER_FUNCTION - return type & arguments type -> push function index on stack
 
+	// Header start
+	FILE* fd = stdin;
+	const char* protect_field = "PROTECT0";
+	char buffer[9] = {0};
+	int b = fread(buffer, 8, 1, fd);
+	if (b < 1) {
+		return -1;
+	}
+
+	if (strcmp(buffer, protect_field) != 0) {
+		return -2;
+	}
+
+	// Stack size in u64
+	// Number of std functions
+    // std function id
+	// Number of internal function
+	// offset in CODE section
+
+	// Header end
+	// CODE
+
 	struct vm_state vm;
 	uint64_t* stack = malloc(4096);
+	// custom stack size
+	// table for functions
+
 	vm.sp = stack - sizeof(uint64_t);
-	FILE* fd = stdin;
+
 	while (!feof(fd)) {
 		int c = fgetc(fd);
 		if (c != EOF) {
