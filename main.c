@@ -38,6 +38,7 @@ int main(int argc, char* argv[]) {
 
 	// Switching?
 	// BE, LE test
+	// 0xF0E0D0C0B1A29384
 
 	// Switching?
 	// Different operand size (u64/u32)
