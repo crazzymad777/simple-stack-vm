@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <math.h>
+#include <dlfcn.h>
 
 int ssvm_execute(struct vm_state* vm_ptr, FILE* fd, void* stack);
 int ssvm_call(struct vm_state vm, FILE* fd, void* stack);
@@ -136,6 +137,18 @@ int ssvm_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 		} else if (c == COMMAND_CALL_C) {
 			*(vm.sp-sizeof(uint64_t)) = (uint64_t)__builtin_apply((void(*)())(*vm.sp), (void*)*(vm.sp-sizeof(uint64_t)), *(vm.sp-sizeof(uint64_t)*2));
 			*vm.sp = *(vm.sp-sizeof(uint64_t)*2);
+		} else if (c == COMMAND_LOAD_NATIVE_FN) {
+			if (*vm.sp == 0) {
+				*vm.sp_fn_ptr = dlopen;
+			} else if (*vm.sp == 1) {
+				*vm.sp_fn_ptr = dlerror;
+			} else if (*vm.sp == 2) {
+				*vm.sp_fn_ptr = dlsym;
+			} else if (*vm.sp == 3) {
+				*vm.sp_fn_ptr = dlclose;
+			} else {
+				*vm.sp = 0;
+			}
 		} else if (c == COMMAND_CALL) {
 			*vm_ptr = vm;
 			fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);

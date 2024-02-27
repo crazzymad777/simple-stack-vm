@@ -27,7 +27,6 @@
 
 #define COMMAND_RET 15
 
-
 #define COMMAND_TAKE 19 // dereference *sp and replace *sp
 
 // sysv-amd64 call
@@ -67,6 +66,12 @@
 #define COMMAND_TO_INTEGER 47 // convert floating point to integer
 
 #define COMMAND_CALL_C 48 // *sp - function pointer, *(sp-1) arguments pointer, *(sp-2) size of arguments
+// #define COMMAND_CALL_STD_SSVM 49 // index
+#define COMMAND_LOAD_NATIVE_FN 49 // index, return pointer to function on stack
+// 0 - dlopen - char* filename, int flag -> void
+// 1 - dlerror - -> char*
+// 2 - dlsym - void* handle, char* symbol
+// 3 - dlclose - void* handle -> int
 
 struct vm_state {
 	union {
@@ -74,6 +79,7 @@ struct vm_state {
 		int64_t* sp_s; // stack pointer (signed value)
 		double* sp_f64;
 		uint64_t** sp_ptr;
+		void** sp_fn_ptr;
 	};
 	size_t operand_size;
 };
