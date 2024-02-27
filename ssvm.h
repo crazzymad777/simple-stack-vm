@@ -16,7 +16,15 @@
 #define COMMAND_BITWISE_OR 11
 #define COMMAND_BITWISE_XOR 12
 #define COMMAND_CLONE 13 // *sp+1 = *sp; sp += 1 
+#define COMMAND_OMIT 32 // sp -= 1
+
 #define COMMAND_CALL 14
+// *sp = function index
+// *(sp-n) = function arguments
+// *(sp-n-m) = function return
+
+// VM set SP on function return
+
 #define COMMAND_RET 15
 
 // Doubt
@@ -57,6 +65,7 @@
 #define COMMAND_MALLOC 29 // *sp = sizeof heap -> returns pointer on stack: *sp = malloc(*sp)
 #define COMMAND_LOAD 30 // uint64 N, N bytes
 #define COMMAND_FREE 31 // *sp
+//#define COMMAND_OMIT 32
 
 struct vm_state {
 	uint64_t* sp; // stack pointer

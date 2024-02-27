@@ -117,6 +117,8 @@ int main(int argc, char* argv[]) {
 				uint64_t cell = *vm.sp;
 				vm.sp += sizeof(uint64_t);
 				*vm.sp = cell;
+			} else if (c == COMMAND_OMIT) {
+				vm.sp -= sizeof(uint64_t);
 			} else if (c == COMMAND_MALLOC) {
 				vm.sp = malloc(*vm.sp);
 			} else if (c == COMMAND_FREE) {
@@ -133,6 +135,7 @@ int main(int argc, char* argv[]) {
 			}
 		}
 	}
+
 	free(stack);
 	return 0;
 }
