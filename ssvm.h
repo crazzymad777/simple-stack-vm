@@ -34,7 +34,7 @@
 #define COMMAND_DLCLOSE 18*/
 // -----------
 
-//#define COMMAND_TAKE 19 // derefernce uint64* and push on stack // doubt. Because static address
+#define COMMAND_TAKE 19 // dereference *sp and replace *sp
 
 //#define COMMAND_POP_BY_POINTER 20 // **sp = *(sp-1); sp -= 2
 //#define COMMAND_TAKE_BY_POINTER 21 // *sp = **sp
@@ -73,6 +73,7 @@ struct vm_state {
 	union {
 		uint64_t* sp; // stack pointer
 		double* sp_f64;
+		uint64_t** sp_ptr;
 	};
 };
 
