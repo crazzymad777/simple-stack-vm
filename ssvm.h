@@ -62,9 +62,14 @@
 #define COMMAND_LEFT_SHIFT 43
 #define COMMAND_SWAP 44
 
+#define COMMAND_TO_FP 45
+#define COMMAND_TO_FP_S 46 // signed
+#define COMMAND_TO_INTEGER 47 // convert floating point to integer
+
 struct vm_state {
 	union {
 		uint64_t* sp; // stack pointer
+		int64_t* sp_s; // stack pointer (signed value)
 		double* sp_f64;
 		uint64_t** sp_ptr;
 	};

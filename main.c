@@ -116,6 +116,12 @@ int ssvm_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 			uint64_t value = *vm.sp;
 			*vm.sp = *(vm.sp-sizeof(uint64_t));
 			*(vm.sp-sizeof(uint64_t)) = value;
+		} else if (c == COMMAND_TO_FP) {
+			*vm.sp_f64 = *vm.sp;
+		} else if (c == COMMAND_TO_FP_S) {
+			*vm.sp_f64 = *vm.sp_s;
+		} else if (c == COMMAND_TO_INTEGER) {
+			*vm.sp = *vm.sp_f64;
 		} else if (c == COMMAND_JUMP) {
 			long pos = ftell(fd) - 1;
 			uint64_t offset;
