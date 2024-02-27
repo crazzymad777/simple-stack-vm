@@ -93,30 +93,39 @@ int main(int argc, char* argv[]) {
 				*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) + *vm.sp; 
 				vm.sp = vm.sp-sizeof(uint64_t);
 			} else if (c == COMMAND_SUB) {
-					*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) - *vm.sp;
-					vm.sp = vm.sp-sizeof(uint64_t);
+				*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) - *vm.sp;
+				vm.sp = vm.sp-sizeof(uint64_t);
 			} else if (c == COMMAND_MUL) {
-					*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) * *vm.sp;
-					vm.sp = vm.sp-sizeof(uint64_t);
+				*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) * *vm.sp;
+				vm.sp = vm.sp-sizeof(uint64_t);
 			} else if (c == COMMAND_DIV) {
-					*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) / *vm.sp;
-					vm.sp = vm.sp-sizeof(uint64_t);
+				*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) / *vm.sp;
+				vm.sp = vm.sp-sizeof(uint64_t);
 			} else if (c == COMMAND_REM) {
-					*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) % *vm.sp;
-					vm.sp = vm.sp-sizeof(uint64_t);
+				*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) % *vm.sp;
+				vm.sp = vm.sp-sizeof(uint64_t);
 			} else if (c == COMMAND_BITWISE_AND) {
-					*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) & *vm.sp;
-					vm.sp = vm.sp-sizeof(uint64_t);
+				*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) & *vm.sp;
+				vm.sp = vm.sp-sizeof(uint64_t);
 			} else if (c == COMMAND_BITWISE_OR) {
-					*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) | *vm.sp;
-					vm.sp = vm.sp-sizeof(uint64_t);
+				*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) | *vm.sp;
+				vm.sp = vm.sp-sizeof(uint64_t);
 			} else if (c == COMMAND_BITWISE_XOR) {
-					*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) ^ *vm.sp;
-					vm.sp = vm.sp-sizeof(uint64_t);
+				*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) ^ *vm.sp;
+				vm.sp = vm.sp-sizeof(uint64_t);
 			} else if (c == COMMAND_CLONE) {
 				uint64_t cell = *vm.sp;
 				vm.sp += sizeof(uint64_t);
 				*vm.sp = cell;
+			} else if (c == COMMAND_MALLOC) {
+				vm.sp = malloc(*vm.sp);
+			} else if (c == COMMAND_FREE) {
+				free(vm.sp);
+				vm.sp = vm.sp-sizeof(uint64_t);
+			} else if (c == COMMAND_CALL || c == COMMAND_RET || c == COMMAND_FP_ADD || c == COMMAND_FP_SUB || c == COMMAND_FP_MUL || c == COMMAND_FP_DIV || c == COMMAND_FP_POWER || c == COMMAND_FP_CEIL || c == COMMAND_FP_ROUND || c == COMMAND_LOAD) {
+				printf("Error! Not implemented opcode: 0x%x\n", c);
+				free(stack);
+				return -5;
 			} else {
 				printf("Error! Unknown opcode: 0x%x\n", c);
 				free(stack);

@@ -20,16 +20,27 @@
 #define COMMAND_RET 15
 
 // Doubt
-#define COMMAND_DLOPEN 16
+/*#define COMMAND_DLOPEN 16
 #define COMMAND_DLERROR 17
 #define COMMAND_DLSYM 18
-#define COMMAND_DLCLOSE 18
+#define COMMAND_DLCLOSE 18*/
+// -----------
 
-#define COMMAND_TAKE 19 // derefernce uint64* and push on stack // doubt. Because static address
+//#define COMMAND_TAKE 19 // derefernce uint64* and push on stack // doubt. Because static address
+
+//#define COMMAND_POP_BY_POINTER 20 // **sp = *(sp-1); sp -= 2
+//#define COMMAND_TAKE_BY_POINTER 21 // *sp = **sp
 
 // sysv-amd64 call
 
 // float-pointing values
+#define COMMAND_FP_ADD 22 // *(sp-1) = *(sp-1) + *sp ; sp -= 1
+#define COMMAND_FP_SUB 23
+#define COMMAND_FP_MUL 24
+#define COMMAND_FP_DIV 25
+#define COMMAND_FP_POWER 26
+#define COMMAND_FP_CEIL 27
+#define COMMAND_FP_ROUND 28
 
 
 // load N {u64 n times}
@@ -42,6 +53,10 @@
 // Perfect:
 // MALLOC
 // LOAD DATA BY POINTER
+
+#define COMMAND_MALLOC 29 // *sp = sizeof heap -> returns pointer on stack: *sp = malloc(*sp)
+#define COMMAND_LOAD 30 // uint64 N, N bytes
+#define COMMAND_FREE 31 // *sp
 
 struct vm_state {
 	uint64_t* sp; // stack pointer
