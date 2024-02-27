@@ -4,7 +4,7 @@
 #include <inttypes.h>
 
 #define COMMAND_PUSH 1 // uint64
-#define COMMAND_POP 2 // uint64*
+#define COMMAND_POP 2 // uint64* // doubt. Because static address
 #define COMMAND_PRINT 3 // -
 #define COMMAND_SEEK_SP 4 // int64
 #define COMMAND_ADD 5
@@ -24,6 +24,8 @@
 #define COMMAND_DLERROR 17
 #define COMMAND_DLSYM 18
 #define COMMAND_DLCLOSE 18
+
+#define COMMAND_TAKE 19 // derefernce uint64* and push on stack // doubt. Because static address
 
 // sysv-amd64 call
 

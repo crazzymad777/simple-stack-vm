@@ -77,9 +77,9 @@ int main(int argc, char* argv[]) {
 				uint64_t* pointer;
 				int bytes = fread(&pointer, 8, 1, fd);
 				if (bytes == 1) {
-					vm.sp -= sizeof(uint64_t);
-					*pointer = *vm.sp;
 					//vm.sp -= sizeof(uint64_t);
+					*pointer = *vm.sp;
+					vm.sp -= sizeof(uint64_t);
 				}
 			} else if (c == COMMAND_PRINT) {
 				printf("%lx", *vm.sp);
@@ -93,33 +93,38 @@ int main(int argc, char* argv[]) {
 				*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) + *vm.sp; 
 				vm.sp = vm.sp-sizeof(uint64_t);
 			} else if (c == COMMAND_SUB) {
-                                *(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) - *vm.sp;
-                                vm.sp = vm.sp-sizeof(uint64_t);
-                        } else if (c == COMMAND_MUL) {
-                                *(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) * *vm.sp;
-                                vm.sp = vm.sp-sizeof(uint64_t);
-                        } else if (c == COMMAND_DIV) {
-                                *(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) / *vm.sp;
-                                vm.sp = vm.sp-sizeof(uint64_t);
-                        } else if (c == COMMAND_REM) {
-                                *(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) % *vm.sp;
-                                vm.sp = vm.sp-sizeof(uint64_t);
-                        } else if (c == COMMAND_BITWISE_AND) {
-                                *(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) & *vm.sp;
-                                vm.sp = vm.sp-sizeof(uint64_t);
-                        } else if (c == COMMAND_BITWISE_OR) {
-                                *(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) | *vm.sp;
-                                vm.sp = vm.sp-sizeof(uint64_t);
-                        } else if (c == COMMAND_BITWISE_XOR) {
-                                *(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) ^ *vm.sp;
-                                vm.sp = vm.sp-sizeof(uint64_t);
-                        } else if (c == COMMAND_CLONE) {
+					*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) - *vm.sp;
+					vm.sp = vm.sp-sizeof(uint64_t);
+			} else if (c == COMMAND_MUL) {
+					*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) * *vm.sp;
+					vm.sp = vm.sp-sizeof(uint64_t);
+			} else if (c == COMMAND_DIV) {
+					*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) / *vm.sp;
+					vm.sp = vm.sp-sizeof(uint64_t);
+			} else if (c == COMMAND_REM) {
+					*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) % *vm.sp;
+					vm.sp = vm.sp-sizeof(uint64_t);
+			} else if (c == COMMAND_BITWISE_AND) {
+					*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) & *vm.sp;
+					vm.sp = vm.sp-sizeof(uint64_t);
+			} else if (c == COMMAND_BITWISE_OR) {
+					*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) | *vm.sp;
+					vm.sp = vm.sp-sizeof(uint64_t);
+			} else if (c == COMMAND_BITWISE_XOR) {
+					*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) ^ *vm.sp;
+					vm.sp = vm.sp-sizeof(uint64_t);
+			} else if (c == COMMAND_CLONE) {
 				uint64_t cell = *vm.sp;
 				vm.sp += sizeof(uint64_t);
 				*vm.sp = cell;
+			} else {
+				printf("Error! Unknown opcode: 0x%x\n", c);
+				free(stack);
+				return -4;
 			}
 		}
 	}
 	free(stack);
+	return 0;
 }
 
