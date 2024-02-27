@@ -13,6 +13,14 @@ int main(int argc, char* argv[]) {
 
 	FILE* fd = stdin;
 	if (argc > 1) {
+		// Debug, default stack size, endiness, operand size, fp operand size, disable FFI, disable STD functions
+		// -d - debug
+		// -s size - stack size
+		// -e {be,le} - endiness
+		// -o {32/64} - operand size
+		// -f {32/64} - fp operand size
+		// -no-ffi - disable ffi
+		// -no-std - disable std
 		FILE* f = fopen(argv[1], "r");
 		if (f == NULL) {
 			perror("Couldn't open file");
