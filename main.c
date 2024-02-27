@@ -119,6 +119,10 @@ int ssvm_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 			uint64_t offset;
 			int bytes = fread(&offset, 8, 1, fd);
 			if (bytes == 1) {
+				if (offset == 0) {
+					fprintf(stderr, "Simple Stack VM halt!\n");
+					return -6;
+				}
 				fseek(fd, pos + offset, SEEK_SET);
 			}
 		} else if (c == COMMAND_CALL) {
