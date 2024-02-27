@@ -195,5 +195,9 @@ int main(int argc, char* argv[]) {
 	vm.sp = stack - vm.operand_size;
 	ssvm_call(vm, fd, stack);
 	free(stack);
+
+	if (stdin != fd) {
+		fclose(fd);
+	}
 	return 0;
 }
