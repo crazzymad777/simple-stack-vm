@@ -6,6 +6,9 @@
 #include <string.h>
 #include <math.h>
 
+int ssvm_execute(struct vm_state* vm_ptr, FILE* fd, void* stack);
+int ssvm_call(struct vm_state vm, FILE* fd, void* stack);
+
 int ssvm_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 	struct vm_state vm = *vm_ptr;
 
@@ -111,7 +114,15 @@ int ssvm_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 			*vm.sp_f64 = round(*vm.sp_f64);
 		} else if (c == COMMAND_TAKE) {
 			*vm.sp = **vm.sp_ptr;
-		} else if (c == COMMAND_CALL || c == COMMAND_RET || c == COMMAND_LOAD || c == COMMAND_JUMP) {
+		} else if (c == COMMAND_CALL) {
+			*vm_ptr = vm;
+			fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
+			return -5;
+		} else if (c == COMMAND_RET) {
+			*vm_ptr = vm;
+			fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
+			return -5;
+		} else if (c == COMMAND_LOAD || c == COMMAND_JUMP) {
 			*vm_ptr = vm;
 			fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
 			return -5;
@@ -192,11 +203,7 @@ int main(int argc, char* argv[]) {
 
 	struct vm_state vm;
 	uint64_t* stack = malloc(4096);
-	// custom stack size
-	// table for functions
-
 	vm.sp = stack - sizeof(uint64_t);
-
 	ssvm_call(vm, fd, stack);
 	free(stack);
 	return 0;
