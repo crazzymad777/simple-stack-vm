@@ -64,6 +64,7 @@ struct vm_state {
 		double* sp_f64;
 		uint64_t** sp_ptr;
 	};
+	size_t operand_size;
 };
 
 #endif

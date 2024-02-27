@@ -15,24 +15,16 @@ int ssvm_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 	int c = fgetc(fd);
 	if (c != EOF) {
 		if (c == COMMAND_PUSH) {
-			//if (debug) {
-			//	printf("push ");
-			//}
-
 			uint64_t piece;
 			int bytes = fread(&piece, 8, 1, fd);
 			if (bytes == 1) {
-				//if(debug) printf("%d\n", piece);
-
 				vm.sp += sizeof(uint64_t);
 				*vm.sp = piece;
-				//vm.sp += sizeof(uint64_t);
 			}
 		} else if (c == COMMAND_POP) {
 			uint64_t* pointer;
 			int bytes = fread(&pointer, 8, 1, fd);
 			if (bytes == 1) {
-				//vm.sp -= sizeof(uint64_t);
 				*pointer = *vm.sp;
 				vm.sp -= sizeof(uint64_t);
 			}
@@ -147,10 +139,6 @@ int ssvm_call(struct vm_state vm, FILE* fd, void* stack) {
 }
 
 int main(int argc, char* argv[]) {
-	// safe call
-	// COMMAND CALL - function index
-	// COMMAND_REGISTER_FUNCTION - return type & arguments type -> push function index on stack
-
 	FILE* fd = stdin;
 	if (argc > 1) {
 		// Debug, default stack size, endiness, operand size, fp operand size, disable FFI, disable STD functions
@@ -190,7 +178,7 @@ int main(int argc, char* argv[]) {
 
 	// Switching?
 	// Different operand size (u64/u32)
-	// Diffrent floating-point operand size (f64/f32)
+	// Different floating-point operand size (f64/f32)
 
 	// Stack size in u64
 	// Number of std functions
@@ -203,7 +191,8 @@ int main(int argc, char* argv[]) {
 
 	struct vm_state vm;
 	uint64_t* stack = malloc(4096);
-	vm.sp = stack - sizeof(uint64_t);
+	vm.operand_size = sizeof(uint64_t)
+	vm.sp = stack - vm.operand_size;
 	ssvm_call(vm, fd, stack);
 	free(stack);
 	return 0;
