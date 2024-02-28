@@ -70,7 +70,7 @@ int ssvm_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 		} else if (c == COMMAND_OMIT) {
 			vm.sp -= sizeof(uint64_t);
 		} else if (c == COMMAND_MALLOC) {
-			*vm.sp = malloc(*vm.sp);
+			*vm.sp = (uint64_t)malloc(*vm.sp);
 		} else if (c == COMMAND_FREE) {
 			free(vm.sp);
 			vm.sp = vm.sp-sizeof(uint64_t);
@@ -135,8 +135,19 @@ int ssvm_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 				fseek(fd, pos + offset, SEEK_SET);
 			}
 		} else if (c == COMMAND_CALL_C) {
-			*(vm.sp-sizeof(uint64_t)) = (uint64_t)__builtin_apply((void(*)())(*vm.sp), (void*)*(vm.sp-sizeof(uint64_t)), *(vm.sp-sizeof(uint64_t)*2));
-			*vm.sp = *(vm.sp-sizeof(uint64_t)*2);
+			/*void* args = (void*) *(vm.sp-sizeof(uint64_t));
+			void(*fn)() = (void(*)()) *(vm.sp-sizeof(uint64_t)*2);
+			size_t siz = *vm.sp;
+			printf("%s\n", args);
+			printf("%x,%x : %x,%x\n", fn, &args, args, siz);
+
+			*(vm.sp-sizeof(uint64_t)*2) = (uint64_t)__builtin_apply(fn, &args, siz);
+			vm.sp -= sizeof(uint64_t)*2;*/
+
+			// USE libffi
+			*vm_ptr = vm;
+			fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
+			return -5;
 		} else if (c == COMMAND_LOAD_NATIVE_FN) {
 			if (*vm.sp == 0) {
 				*vm.sp_fn_ptr = dlopen;
@@ -152,10 +163,15 @@ int ssvm_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 				*vm.sp = 0;
 			}
 		} else if (c == COMMAND_LOAD) {
-			uint64_t n;
+			uint64_t n = 0;
 			int bytes = fread(&n, 8, 1, fd);
+			//printf("%d\n", n);
 			if (bytes == 1) {
-				fread((void*)*vm.sp, n, 1, fd);
+				//printf("%x\n", *vm.sp);
+
+				char buffer[n];
+				fread(buffer, n, 1, fd);
+				memcpy((void*)*vm.sp, buffer, n);
 			}
 		} else if (c == COMMAND_CALL) {
 			*vm_ptr = vm;
@@ -192,7 +208,7 @@ int ssvm_call(struct vm_state vm, FILE* fd, void* stack) {
 int main(int argc, char* argv[]) {
 	FILE* fd = stdin;
 	if (argc > 1) {
-		FILE* f = fopen(argv[1], "rb");
+		FILE* f = fopen(argv[1], "r");
 		if (f == NULL) {
 			perror("Couldn't open file");
 			return -3;
