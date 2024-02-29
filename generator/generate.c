@@ -43,7 +43,7 @@ int main() {
 
 	putchar(COMMAND_PRINT_ALL);
 
-	putchar(COMMAND_CALL_C);
+//	putchar(COMMAND_CALL_C);
 	/*char buffer[] = "hello!";
 	int64_t siz = strlen(buffer);
 

@@ -48,7 +48,20 @@ void* op_add(void* sp, FILE* fd, int* error) {
     return sp;
 }
 
+void* op_right_shift(void* sp, FILE* fd, int* error) {
+    uint64_t* x = sp-sizeof(uint64_t);
+    uint64_t* y = sp;
+    *x = *x >> *y;
+    sp = sp-sizeof(uint64_t);
+    return sp;
+}
+
+void* op_not_implemented(void* sp, FILE* fd, int* error) {
+    *error = -5;
+    return sp;
+}
 
 void* op_unknown(void* sp, FILE* fd, int* error) {
-
+    *error = -4;
+    return sp;
 }

@@ -17,33 +17,22 @@ int ssvm_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 
 	int c = fgetc(fd);
 	if (c != EOF) {
-		if (c == COMMAND_PUSH) {
-			int error_code = 0;
-			vm.sp = op_push(vm.sp, fd, &error_code);
-		} else if (c == COMMAND_POP) {
-			// move?
-			// **sp = *(sp-1)
-			// sp -= 2
-
-			int error_code = 0;
-			vm.sp = op_pop(vm.sp, fd, &error_code);
-			if (error_code != 0) {
-				*vm_ptr = vm;
-				return error_code;
+		//printf("%d : 0x%x\n", c, c);
+		int error_code = 0;
+		//printf("\n%x\n", opcode_matrix[c]);
+		vm.sp = opcode_matrix[c](vm.sp, fd, &error_code);
+		if (error_code != 0) {
+			if (error_code == -4) {
+				fprintf(stderr, "Error! Unknown opcode: 0x%x\n", c);
+			} else if (error_code == -5) {
+				fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
 			}
-		} else if (c == COMMAND_PRINT) {
-			int error_code = 0;
-			vm.sp = op_print(vm.sp, fd, &error_code);
-		} else if (c == COMMAND_PRINT_FP) {
-			int error_code = 0;
-			vm.sp = op_print_fp(vm.sp, fd, &error_code);
-		} else if (c == COMMAND_SEEK_SP) {
-			int error_code = 0;
-			vm.sp = op_seek_sp(vm.sp, fd, &error_code);
-		} else if (c == COMMAND_ADD) {
-			int error_code = 0;
-			vm.sp = op_add(vm.sp, fd, &error_code);
-		} else if (c == COMMAND_SUB) {
+
+			*vm_ptr = vm;
+			return error_code;
+		}
+
+		/*if (c == COMMAND_SUB) {
 			*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) - *vm.sp;
 			vm.sp = vm.sp-sizeof(uint64_t);
 		} else if (c == COMMAND_MUL) {
@@ -108,9 +97,6 @@ int ssvm_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 			*vm.sp_f64 = round(*vm.sp_f64);
 		} else if (c == COMMAND_TAKE) {
 			*vm.sp = **vm.sp_ptr;
-		} else if (c == COMMAND_RIGHT_SHIFT) {
-			*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) >> *vm.sp;
-			vm.sp = vm.sp-sizeof(uint64_t);
 		} else if (c == COMMAND_LEFT_SHIFT) {
 			*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) << *vm.sp;
 			vm.sp = vm.sp-sizeof(uint64_t);
@@ -136,15 +122,6 @@ int ssvm_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 				fseek(fd, pos + offset, SEEK_SET);
 			}
 		} else if (c == COMMAND_CALL_C) {
-			/*void* args = (void*) *(vm.sp-sizeof(uint64_t));
-			void(*fn)() = (void(*)()) *(vm.sp-sizeof(uint64_t)*2);
-			size_t siz = *vm.sp;
-			printf("%s\n", args);
-			printf("%x,%x : %x,%x\n", fn, &args, args, siz);
-
-			*(vm.sp-sizeof(uint64_t)*2) = (uint64_t)__builtin_apply(fn, &args, siz);
-			vm.sp -= sizeof(uint64_t)*2;*/
-
 			// USE libffi
 			*vm_ptr = vm;
 			fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
@@ -190,7 +167,7 @@ int ssvm_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 			*vm_ptr = vm;
 			fprintf(stderr, "Error! Unknown opcode: 0x%x\n", c);
 			return -4;
-		}
+		} */
 	}
 	*vm_ptr = vm;
 	return 0;
