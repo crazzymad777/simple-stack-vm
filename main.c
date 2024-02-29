@@ -1,11 +1,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <inttypes.h>
+#include "ssvm_op.h"
 #include "ssvm.h"
 #include <stdbool.h>
 #include <string.h>
 #include <math.h>
 #include <dlfcn.h>
+#include <ffi.h>
 
 int ssvm_execute(struct vm_state* vm_ptr, FILE* fd, void* stack);
 int ssvm_call(struct vm_state vm, FILE* fd, void* stack);
@@ -16,29 +18,27 @@ int ssvm_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 	int c = fgetc(fd);
 	if (c != EOF) {
 		if (c == COMMAND_PUSH) {
-			uint64_t piece;
-			int bytes = fread(&piece, 8, 1, fd);
-			if (bytes == 1) {
-				vm.sp += sizeof(uint64_t);
-				*vm.sp = piece;
-			}
+			int error_code = 0;
+			vm.sp = op_push(vm.sp, fd, &error_code);
 		} else if (c == COMMAND_POP) {
-			uint64_t* pointer;
-			int bytes = fread(&pointer, 8, 1, fd);
-			if (bytes == 1) {
-				*pointer = *vm.sp;
-				vm.sp -= sizeof(uint64_t);
+			// move?
+			// **sp = *(sp-1)
+			// sp -= 2
+
+			int error_code = 0;
+			vm.sp = op_pop(vm.sp, fd, &error_code);
+			if (error_code != 0) {
+				*vm_ptr = vm;
+				return error_code;
 			}
 		} else if (c == COMMAND_PRINT) {
-			printf("%lx", *vm.sp);
+			int error_code = 0;
+			vm.sp = op_print(vm.sp, fd, &error_code);
 		} else if (c == COMMAND_PRINT_FP) {
-			printf("%lf", *((double*)vm.sp));
+			int error_code = 0;
+			vm.sp = op_print_fp(vm.general, fd, &error_code);
 		} else if (c == COMMAND_SEEK_SP) {
-			int64_t piece;
-			int bytes = fread(&piece, 8, 1, fd);
-			if (bytes == 1) {
-				vm.sp += piece * sizeof(uint64_t);
-			}
+
 		} else if (c == COMMAND_ADD) {
 			*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) + *vm.sp;
 			vm.sp = vm.sp-sizeof(uint64_t);
