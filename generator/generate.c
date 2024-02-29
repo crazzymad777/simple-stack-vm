@@ -16,9 +16,23 @@ int main() {
 	putchar(COMMAND_RIGHT_SHIFT);
 	putchar(COMMAND_PRINT);
 	putchar(COMMAND_TO_FP_S);
-	// putchar(COMMAND_PRINT_FP);
 	putchar(COMMAND_PUSH);
 	double c = 8;
 	fwrite(&c, 8, 1, stdout);
+	putchar(COMMAND_ASSERT);
+
+	putchar(COMMAND_OMIT);
+	putchar(COMMAND_OMIT);
+
+	putchar(COMMAND_PUSH);
+	fwrite(&a, 8, 1, stdout);
+	putchar(COMMAND_PRINT);
+	putchar(COMMAND_PUSH);
+	fwrite(&b, 8, 1, stdout);
+	putchar(COMMAND_PRINT);
+	putchar(COMMAND_ADD);
+	putchar(COMMAND_PUSH);
+	int64_t d = 34;
+	fwrite(&d, 8, 1, stdout);
 	putchar(COMMAND_ASSERT);
 }

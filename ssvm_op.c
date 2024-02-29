@@ -24,13 +24,13 @@ void* op_pop(void* sp, FILE* fd, int* error) {
 
 void* op_print(void* sp, FILE* fd, int* error) {
     uint64_t* x = sp;
-    printf("%lx", x);
+    printf("%lx\n", *x);
     return sp;
 }
 
 void* op_print_fp(void* sp, FILE* fd, int* error) {
     double* x = sp;
-    printf("%lf", *x);
+    printf("%lf\n", *x);
     return sp;
 }
 
