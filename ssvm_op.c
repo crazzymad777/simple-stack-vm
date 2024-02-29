@@ -60,8 +60,8 @@ void* op_right_shift(void* sp, FILE* fd, int* error) {
 }
 
 void* op_to_fp_s(void* sp, FILE* fd, int* error) {
-    double* x = sp;
-    int64_t* result = sp;
+    int64_t* x = sp;
+    double* result = sp;
     *result = *x;
     return sp;
 }
@@ -264,7 +264,10 @@ void* op_swap(void* sp, FILE* fd, int* error) {
 }
 
 void* op_to_fp(void* sp, FILE* fd, int* error) {
-    return op_stub(sp, fd, error);
+    uint64_t* x = sp;
+    double* result = sp;
+    *result = *x;
+    return sp;
 }
 
 void* op_to_integer(void* sp, FILE* fd, int* error) {
@@ -273,6 +276,20 @@ void* op_to_integer(void* sp, FILE* fd, int* error) {
 
 void* op_call_c(void* sp, FILE* fd, int* error) {
     return op_stub(sp, fd, error);
+}
+
+void* op_assert(void* sp, FILE* fd, int* error) {
+    uint64_t* x = (sp-sizeof(uint64_t));
+    uint64_t* y = sp;
+    uint64_t z = *x;
+    uint64_t t = *y;
+    if (z == t) {
+
+    } else {
+        printf("%ld != %ld\n", z, t);
+        *error = -16;
+    }
+    return sp;
 }
 
 void* op_stub(void* sp, FILE* fd, int* error) {

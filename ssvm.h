@@ -75,6 +75,8 @@
 // 3 - dlclose - void* handle -> int
 // 4 - puts
 
+#define COMMAND_ASSERT 50
+
 struct vm_state {
 	union {
 		uint64_t* sp; // stack pointer

@@ -52,6 +52,7 @@ void* op_to_integer(void* sp, FILE* fd, int* error);
 
 void* op_call_c(void* sp, FILE* fd, int* error);
 void* op_load_native_fn(void* sp, FILE* fd, int* error);
+void* op_assert(void* sp, FILE* fd, int* error);
 
 void* op_stub(void* sp, FILE* fd, int* error);
 void* op_not_implemented(void* sp, FILE* fd, int* error);
@@ -106,7 +107,8 @@ ssvm_atom opcode_matrix[256] = {
     [COMMAND_TO_INTEGER] = op_to_integer,
     [COMMAND_CALL_C] = op_call_c,
     [COMMAND_LOAD_NATIVE_FN] = op_load_native_fn,
-    [(COMMAND_LOAD_NATIVE_FN + 1) ... 255] = op_unknown
+    [COMMAND_ASSERT] = op_assert,
+    [(COMMAND_ASSERT + 1) ... 255] = op_unknown
 };
 
 #endif
