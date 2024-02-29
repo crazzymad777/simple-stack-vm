@@ -17,9 +17,10 @@ void* op_push(void* sp, FILE* fd, int* error) {
 }
 
 void* op_pop(void* sp, FILE* fd, int* error) {
-    *error = -5;
-    fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", COMMAND_POP);
-    return sp;
+    uint64_t** ptr = sp;
+    uint64_t* value_ptr = sp-sizeof(uint64_t);
+    **ptr = *value_ptr;
+    return sp - sizeof(uint64_t) * 2;
 }
 
 void* op_print(void* sp, FILE* fd, int* error) {

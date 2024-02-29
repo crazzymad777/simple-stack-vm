@@ -77,6 +77,10 @@
 
 #define COMMAND_ASSERT 50
 
+#define COMMAND_GET_SP 51
+#define COMMAND_CHANGE_STACK 52
+// #define COMMAND_NEW_STACK 53
+
 struct vm_state {
 	union {
 		uint64_t* sp; // stack pointer

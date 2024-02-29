@@ -17,12 +17,8 @@ int ssvm_branches_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 				*vm.sp = piece;
 			}
 		} else if (c == COMMAND_POP) {
-			uint64_t* pointer;
-			int bytes = fread(&pointer, 8, 1, fd);
-			if (bytes == 1) {
-				*pointer = *vm.sp;
-				vm.sp -= sizeof(uint64_t);
-			}
+			**vm.sp_ptr = *(vm.sp-sizeof(uint64_t));
+			vm.sp -= sizeof(uint64_t) * 2;
 		} else if (c == COMMAND_PRINT) {
 			printf("%lx\n", *vm.sp);
 		} else if (c == COMMAND_PRINT_FP) {
@@ -163,7 +159,7 @@ int ssvm_branches_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
                 *vm_ptr = vm;
                 return -16;
             }
-        } else if (c == COMMAND_CALL) {
+        } else if (c == COMMAND_CALL || c == COMMAND_GET_SP || c == COMMAND_CHANGE_STACK) {
 			*vm_ptr = vm;
 			fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
 			return -5;
