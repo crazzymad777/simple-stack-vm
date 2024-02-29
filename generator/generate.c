@@ -15,7 +15,7 @@ int main() {
 	fwrite(&b, 8, 1, stdout);
 	putchar(COMMAND_RIGHT_SHIFT);
 	putchar(COMMAND_TO_FP_S);
-	// putchar(COMMAND_PRINT_FP);
+	putchar(COMMAND_PRINT_FP);
 
 	putchar(COMMAND_PUSH);
 	int64_t index = 4;
