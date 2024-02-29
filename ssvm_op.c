@@ -83,6 +83,115 @@ void* op_load_native_fn(void* sp, FILE* fd, int* error) {
     return sp;
 }
 
+void* op_sub(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_mul(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_div(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_rem(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_bitwise_and(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_bitwise_or(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_bitwise_xor(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_clone(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_take(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_fp_add(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_fp_sub(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_fp_mul(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_fp_div(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_fp_power(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_fp_ceil(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_fp_round(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_malloc(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_load(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_free(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_omit(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_print_all(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_left_shift(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_swap(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_to_fp(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_to_integer(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_call_c(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_stub(void* sp, FILE* fd, int* error) {
+    *error = -8;
+    return sp;
+}
+
 void* op_not_implemented(void* sp, FILE* fd, int* error) {
     *error = -5;
     return sp;
