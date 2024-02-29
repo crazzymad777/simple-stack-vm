@@ -129,15 +129,6 @@ int ssvm_branches_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 				fseek(fd, pos + offset, SEEK_SET);
 			}
 		} else if (c == COMMAND_CALL_C) {
-			/*void* args = (void*) *(vm.sp-sizeof(uint64_t));
-			void(*fn)() = (void(*)()) *(vm.sp-sizeof(uint64_t)*2);
-			size_t siz = *vm.sp;
-			printf("%s\n", args);
-			printf("%x,%x : %x,%x\n", fn, &args, args, siz);
-
-			*(vm.sp-sizeof(uint64_t)*2) = (uint64_t)__builtin_apply(fn, &args, siz);
-			vm.sp -= sizeof(uint64_t)*2;*/
-
 			// USE libffi
 			*vm_ptr = vm;
 			fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
@@ -159,10 +150,7 @@ int ssvm_branches_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 		} else if (c == COMMAND_LOAD) {
 			uint64_t n = 0;
 			int bytes = fread(&n, 8, 1, fd);
-			//printf("%d\n", n);
 			if (bytes == 1) {
-				//printf("%x\n", *vm.sp);
-
 				char buffer[n];
 				fread(buffer, n, 1, fd);
 				memcpy((void*)*vm.sp, buffer, n);
