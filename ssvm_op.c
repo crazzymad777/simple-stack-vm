@@ -1,37 +1,40 @@
 #include "ssvm_op.h"
 #include <stdio.h>
 
-uint64_t* op_push(uint64_t* sp, FILE* fd, int* error) {
+void* op_push(void* sp, FILE* fd, int* error) {
     uint64_t piece;
     int bytes = fread(&piece, 8, 1, fd);
     if (bytes == 1) {
         sp += sizeof(uint64_t);
-        *sp = piece;
+        uint64_t* value = sp;
+        *value = piece;
     }
     return sp;
 }
 
-uint64_t* op_pop(uint64_t* sp, FILE* fd, int* error) {
+void* op_pop(void* sp, FILE* fd, int* error) {
     *error = -5;
     fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", COMMAND_POP);
     return sp;
 }
 
-uint64_t* op_print(uint64_t* sp, FILE* fd, int* error) {
-    printf("%lx", *sp);
+void* op_print(void* sp, FILE* fd, int* error) {
+    uint64_t* x = sp;
+    printf("%lx", x);
     return sp;
 }
 
-uint64_t* op_print_fp(union stack_pointer vm, FILE* fd, int* error) {
-    printf("%lf", *vm.sp_f64);
-    return vm.sp;
+void* op_print_fp(void* sp, FILE* fd, int* error) {
+    double* x = sp;
+    printf("%lf", *x);
+    return sp;
 }
 
-uint64_t* op_seek_sp(union stack_pointer vm, FILE* fd, int* error) {
+void* op_seek_sp(void* sp, FILE* fd, int* error) {
     int64_t piece;
     int bytes = fread(&piece, 8, 1, fd);
     if (bytes == 1) {
-        vm.sp += piece * sizeof(uint64_t);
+        sp += piece * sizeof(uint64_t);
     }
-    return vm.sp;
+    return sp;
 }

@@ -4,12 +4,12 @@
 #include "ssvm.h"
 #include <stdio.h>
 
-typedef uint64_t* (*ssvm_operate)(uint64_t* sp, FILE* fd, int* error);
+typedef void* (*ssvm_operate)(void* sp, FILE* fd, int* error);
 
-uint64_t* op_push(uint64_t* sp, FILE* fd, int* error);
-uint64_t* op_pop(uint64_t* sp, FILE* fd, int* error);
-uint64_t* op_print(uint64_t* sp, FILE* fd, int* error);
-uint64_t* op_print_fp(union stack_pointer vm, FILE* fd, int* error);
-uint64_t* op_seek_sp(union stack_pointer vm, FILE* fd, int* error);
+void* op_push(void* sp, FILE* fd, int* error);
+void* op_pop(void* sp, FILE* fd, int* error);
+void* op_print(void* sp, FILE* fd, int* error);
+void* op_print_fp(void* sp, FILE* fd, int* error);
+void* op_seek_sp(void* sp, FILE* fd, int* error);
 
 #endif

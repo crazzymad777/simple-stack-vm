@@ -75,14 +75,6 @@
 // 3 - dlclose - void* handle -> int
 // 4 - puts
 
-union stack_pointer {
-	uint64_t* sp; // stack pointer
-	int64_t* sp_s; // stack pointer (signed value)
-	double* sp_f64;
-	uint64_t** sp_ptr;
-	void** sp_fn_ptr;
-};
-
 struct vm_state {
 	union {
 		uint64_t* sp; // stack pointer
@@ -90,7 +82,6 @@ struct vm_state {
 		double* sp_f64;
 		uint64_t** sp_ptr;
 		void** sp_fn_ptr;
-		union stack_pointer general;
 	};
 	size_t operand_size;
 };
