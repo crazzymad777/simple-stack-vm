@@ -47,3 +47,8 @@ void* op_add(void* sp, FILE* fd, int* error) {
     sp = sp-sizeof(uint64_t);
     return sp;
 }
+
+
+void* op_unknown(void* sp, FILE* fd, int* error) {
+
+}
