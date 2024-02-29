@@ -1,3 +1,4 @@
+#define SSVM_FILL_OPCODE_MATRIX
 #include "ssvm_op.h"
 #include <stdio.h>
 
@@ -36,5 +37,13 @@ void* op_seek_sp(void* sp, FILE* fd, int* error) {
     if (bytes == 1) {
         sp += piece * sizeof(uint64_t);
     }
+    return sp;
+}
+
+void* op_add(void* sp, FILE* fd, int* error) {
+    uint64_t* x = sp-sizeof(uint64_t);
+    uint64_t* y = sp;
+    *x = *x + *y;
+    sp = sp-sizeof(uint64_t);
     return sp;
 }

@@ -41,8 +41,8 @@ int ssvm_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 			int error_code = 0;
 			vm.sp = op_seek_sp(vm.sp, fd, &error_code);
 		} else if (c == COMMAND_ADD) {
-			*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) + *vm.sp;
-			vm.sp = vm.sp-sizeof(uint64_t);
+			int error_code = 0;
+			vm.sp = op_add(vm.sp, fd, &error_code);
 		} else if (c == COMMAND_SUB) {
 			*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) - *vm.sp;
 			vm.sp = vm.sp-sizeof(uint64_t);
