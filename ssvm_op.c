@@ -2,6 +2,7 @@
 #include "ssvm_op.h"
 #include <stdio.h>
 #include <dlfcn.h>
+#include <math.h>
 
 void* op_push(void* sp, FILE* fd, int* error) {
     uint64_t piece;
@@ -84,67 +85,125 @@ void* op_load_native_fn(void* sp, FILE* fd, int* error) {
 }
 
 void* op_sub(void* sp, FILE* fd, int* error) {
-    return op_stub(sp, fd, error);
+    uint64_t* x = sp-sizeof(uint64_t);
+    uint64_t* y = sp;
+    *x = *x - *y;
+    sp = sp-sizeof(uint64_t);
+    return sp;
 }
 
 void* op_mul(void* sp, FILE* fd, int* error) {
-    return op_stub(sp, fd, error);
+    uint64_t* x = sp-sizeof(uint64_t);
+    uint64_t* y = sp;
+    *x = *x * *y;
+    sp = sp-sizeof(uint64_t);
+    return sp;
 }
 
 void* op_div(void* sp, FILE* fd, int* error) {
-    return op_stub(sp, fd, error);
+    uint64_t* x = sp-sizeof(uint64_t);
+    uint64_t* y = sp;
+    *x = *x / *y;
+    sp = sp-sizeof(uint64_t);
+    return sp;
 }
 
 void* op_rem(void* sp, FILE* fd, int* error) {
-    return op_stub(sp, fd, error);
+    uint64_t* x = sp-sizeof(uint64_t);
+    uint64_t* y = sp;
+    *x = *x % *y;
+    sp = sp-sizeof(uint64_t);
+    return sp;
 }
 
 void* op_bitwise_and(void* sp, FILE* fd, int* error) {
-    return op_stub(sp, fd, error);
+    uint64_t* x = sp-sizeof(uint64_t);
+    uint64_t* y = sp;
+    *x = *x & *y;
+    sp = sp-sizeof(uint64_t);
+    return sp;
 }
 
 void* op_bitwise_or(void* sp, FILE* fd, int* error) {
-    return op_stub(sp, fd, error);
+    uint64_t* x = sp-sizeof(uint64_t);
+    uint64_t* y = sp;
+    *x = *x | *y;
+    sp = sp-sizeof(uint64_t);
+    return sp;
 }
 
 void* op_bitwise_xor(void* sp, FILE* fd, int* error) {
-    return op_stub(sp, fd, error);
+    uint64_t* x = sp-sizeof(uint64_t);
+    uint64_t* y = sp;
+    *x = *x ^ *y;
+    sp = sp-sizeof(uint64_t);
+    return sp;
 }
 
 void* op_clone(void* sp, FILE* fd, int* error) {
-    return op_stub(sp, fd, error);
+    sp += sizeof(uint64_t);
+    uint64_t* value = sp;
+    *value = *(value - sizeof(uint64_t));
+    return sp;
 }
 
 void* op_take(void* sp, FILE* fd, int* error) {
-    return op_stub(sp, fd, error);
+    uint64_t** value_ptr = sp;
+    uint64_t* value = sp;
+    *value = **value_ptr;
+    return sp;
 }
 
 void* op_fp_add(void* sp, FILE* fd, int* error) {
-    return op_stub(sp, fd, error);
+    double* x = sp-sizeof(uint64_t);
+    double* y = sp;
+    *x = *x + *y;
+    sp = sp-sizeof(uint64_t);
+    return sp;
 }
 
 void* op_fp_sub(void* sp, FILE* fd, int* error) {
-    return op_stub(sp, fd, error);
+    double* x = sp-sizeof(uint64_t);
+    double* y = sp;
+    *x = *x - *y;
+    sp = sp-sizeof(uint64_t);
+    return sp;
 }
 
 void* op_fp_mul(void* sp, FILE* fd, int* error) {
-    return op_stub(sp, fd, error);
+    double* x = sp-sizeof(uint64_t);
+    double* y = sp;
+    *x = *x * *y;
+    sp = sp-sizeof(uint64_t);
+    return sp;
 }
 
 void* op_fp_div(void* sp, FILE* fd, int* error) {
-    return op_stub(sp, fd, error);
+    double* x = sp-sizeof(uint64_t);
+    double* y = sp;
+    *x = *x / *y;
+    sp = sp-sizeof(uint64_t);
+    return sp;
 }
 
 void* op_fp_power(void* sp, FILE* fd, int* error) {
-    return op_stub(sp, fd, error);
+    double* x = sp-sizeof(uint64_t);
+    double* y = sp;
+    *x = pow(*x, *y);
+    sp = sp-sizeof(uint64_t);
+    return sp;
 }
 
 void* op_fp_ceil(void* sp, FILE* fd, int* error) {
-    return op_stub(sp, fd, error);
+    double* x = sp;
+    *x = ceil(*x);
+    return sp;
 }
 
 void* op_fp_round(void* sp, FILE* fd, int* error) {
-    return op_stub(sp, fd, error);
+    double* x = sp;
+    *x = round(*x);
+    return sp;
 }
 
 void* op_malloc(void* sp, FILE* fd, int* error) {

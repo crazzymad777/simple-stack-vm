@@ -5,7 +5,6 @@
 #include "ssvm.h"
 #include <stdbool.h>
 #include <string.h>
-#include <math.h>
 #include <ffi.h>
 
 int ssvm_execute(struct vm_state* vm_ptr, FILE* fd, void* stack);
