@@ -88,6 +88,7 @@
 
 #define COMMAND_COMPARE_FP 0x88
 #define COMMAND_EOF 0x89
+#define COMMAND_IS_NAN 0x8a
 
 struct vm_state {
 	union {

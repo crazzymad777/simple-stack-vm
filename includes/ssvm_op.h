@@ -69,6 +69,10 @@ void* op_read_binary_floating(void* sp, FILE* fd, int* error);
 void* op_print_string(void* sp, FILE* fd, int* error);
 void* op_print_char(void* sp, FILE* fd, int* error);
 
+void* op_compare_fp(void* sp, FILE* fd, int* error);
+void* op_eof(void* sp, FILE* fd, int* error);
+void* op_is_nan(void* sp, FILE* fd, int* error);
+
 void* op_stub(void* sp, FILE* fd, int* error);
 void* op_not_implemented(void* sp, FILE* fd, int* error);
 void* op_unknown(void* sp, FILE* fd, int* error);
@@ -135,9 +139,10 @@ ssvm_atom opcode_matrix[256] = {
     [COMMAND_READ_BINARY_FLOATING] = op_read_binary_floating,
     [COMMAND_PRINT_STRING] = op_print_string,
     [COMMAND_PRINT_CHAR] = op_print_char,
-    [COMMAND_COMPARE_FP] = op_not_implemented,
-    [COMMAND_EOF] = op_not_implemented,
-    [(COMMAND_EOF + 1) ... 255] = op_unknown
+    [COMMAND_COMPARE_FP] = op_compare_fp,
+    [COMMAND_EOF] = op_eof,
+    [COMMAND_IS_NAN] = op_is_nan,
+    [(COMMAND_IS_NAN + 1) ... 255] = op_unknown
 };
 
 #endif

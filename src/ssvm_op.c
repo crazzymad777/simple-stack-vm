@@ -455,6 +455,18 @@ void* op_print_char(void* sp, FILE* fd, int* error) {
     return sp;
 }
 
+void* op_compare_fp(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_eof(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
+void* op_is_nan(void* sp, FILE* fd, int* error) {
+    return op_stub(sp, fd, error);
+}
+
 void* op_stub(void* sp, FILE* fd, int* error) {
     *error = -8;
     return sp;

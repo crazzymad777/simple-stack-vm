@@ -15,6 +15,8 @@ int ssvm_matrix_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 				fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
 			} else if (error_code == -6) {
 				fprintf(stderr, "Simple Stack VM halt!\n");
+			} else if (error_code == -8) {
+				fprintf(stderr, "Error! Not implemented opcode: 0x%x (stub)\n", c);
 			}
 
 			*vm_ptr = vm;
