@@ -108,7 +108,14 @@ ssvm_atom opcode_matrix[256] = {
     [COMMAND_CALL_C] = op_call_c,
     [COMMAND_LOAD_NATIVE_FN] = op_load_native_fn,
     [COMMAND_ASSERT] = op_assert,
-    [(COMMAND_ASSERT + 1) ... 255] = op_unknown
+    [COMMAND_READ_CHAR] = op_not_implemented,
+    [COMMAND_READ_INTEGER] = op_not_implemented,
+    [COMMAND_READ_FLOATING] = op_not_implemented,
+    [COMMAND_READ_BINARY_INTEGER] = op_not_implemented,
+    [COMMAND_READ_BINARY_FLOATING] = op_not_implemented,
+    [COMMAND_PRINT_STRING] = op_not_implemented,
+    [COMMAND_PRINT_CHAR] = op_not_implemented,
+    [(COMMAND_PRINT_CHAR + 1) ... 255] = op_unknown
 };
 
 #endif

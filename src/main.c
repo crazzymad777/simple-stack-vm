@@ -56,7 +56,7 @@ int main(int argc, char* argv[]) {
 	uint64_t* stack = malloc(stack_size);
 
 	if (stack == NULL) {
-		perror("Couldn;t allocate stack.");
+		perror("Couldn't allocate stack.");
 		return -6;
 	}
 

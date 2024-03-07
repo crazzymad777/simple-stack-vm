@@ -77,6 +77,15 @@
 
 #define COMMAND_ASSERT 50
 
+#define COMMAND_READ_CHAR 0x81
+#define COMMAND_READ_INTEGER 0x82
+#define COMMAND_READ_FLOATING 0x83
+#define COMMAND_READ_BINARY_INTEGER 0x84
+#define COMMAND_READ_BINARY_FLOATING 0x85
+
+#define COMMAND_PRINT_STRING 0x86
+#define COMMAND_PRINT_CHAR 0x87
+
 struct vm_state {
 	union {
 		uint64_t* sp; // stack pointer
