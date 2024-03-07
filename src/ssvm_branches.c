@@ -265,7 +265,11 @@ int ssvm_branches_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 			printf("%s", (char*)*vm.sp);
 		} else if (c == COMMAND_PRINT_CHAR) {
 			putchar(*vm.sp);
-		} else if (c == COMMAND_CALL || c == COMMAND_COMPARE_FP || c == COMMAND_EOF) {
+		} else if (c == COMMAND_IS_NAN) {
+			*vm.sp = isnan(*vm.sp_f64);
+		} else if (c == COMMAND_EOF) {
+			*vm.sp = feof(stdin);
+		} else if (c == COMMAND_CALL || c == COMMAND_COMPARE_FP) {
 			*vm_ptr = vm;
 			fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
 			return -5;

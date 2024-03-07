@@ -473,11 +473,16 @@ void* op_compare_fp(void* sp, FILE* fd, int* error) {
 }
 
 void* op_eof(void* sp, FILE* fd, int* error) {
-    return op_stub(sp, fd, error);
+    int64_t* result = sp;
+    *result = feof(stdin);
+    return sp;
 }
 
 void* op_is_nan(void* sp, FILE* fd, int* error) {
-    return op_stub(sp, fd, error);
+    double* double_ptr = sp;
+    int64_t* result = sp;
+    *result = isnan(*double_ptr);
+    return sp;
 }
 
 void* op_stub(void* sp, FILE* fd, int* error) {
