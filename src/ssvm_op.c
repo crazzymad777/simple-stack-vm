@@ -308,9 +308,46 @@ void* op_jump(void* sp, FILE* fd, int* error) {
     return sp;
 }
 
+void* op_read_char(void* sp, FILE* fd, int* error) {
+    sp += sizeof(uint64_t);
+    int64_t* char_ptr = sp;
+    *char_ptr = getchar();
+    return sp;
+}
+
+void* op_read_integer(void* sp, FILE* fd, int* error) {
+    sp += sizeof(uint64_t);
+    scanf("%lx", sp);
+    return sp;
+}
+
+void* op_read_floating(void* sp, FILE* fd, int* error) {
+    sp += sizeof(uint64_t);
+    scanf("%lf", sp);
+    return sp;
+}
+
+void* op_read_binary_integer(void* sp, FILE* fd, int* error) {
+    sp += sizeof(uint64_t);
+    fread(sp, sizeof(uint64_t), 1, fd);
+    return sp;
+}
+
+void* op_read_binary_floating(void* sp, FILE* fd, int* error) {
+    sp += sizeof(uint64_t);
+    fread(sp, sizeof(uint64_t), 1, fd);
+    return sp;
+}
+
 void* op_print_string(void* sp, FILE* fd, int* error) {
     char** str_ptr = sp;
     printf("%s", *str_ptr);
+    return sp;
+}
+
+void* op_print_char(void* sp, FILE* fd, int* error) {
+    char* char_ptr = sp;
+    putchar(*char_ptr);
     return sp;
 }
 

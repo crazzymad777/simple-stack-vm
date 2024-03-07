@@ -60,7 +60,14 @@ void* op_call_c(void* sp, FILE* fd, int* error);
 void* op_load_native_fn(void* sp, FILE* fd, int* error);
 void* op_assert(void* sp, FILE* fd, int* error);
 
+void* op_read_char(void* sp, FILE* fd, int* error);
+void* op_read_integer(void* sp, FILE* fd, int* error);
+void* op_read_floating(void* sp, FILE* fd, int* error);
+void* op_read_binary_integer(void* sp, FILE* fd, int* error);
+void* op_read_binary_floating(void* sp, FILE* fd, int* error);
+
 void* op_print_string(void* sp, FILE* fd, int* error);
+void* op_print_char(void* sp, FILE* fd, int* error);
 
 void* op_stub(void* sp, FILE* fd, int* error);
 void* op_not_implemented(void* sp, FILE* fd, int* error);
@@ -116,13 +123,13 @@ ssvm_atom opcode_matrix[256] = {
     [COMMAND_CALL_C] = op_call_c,
     [COMMAND_LOAD_NATIVE_FN] = op_load_native_fn,
     [COMMAND_ASSERT] = op_assert,
-    [COMMAND_READ_CHAR] = op_not_implemented,
-    [COMMAND_READ_INTEGER] = op_not_implemented,
-    [COMMAND_READ_FLOATING] = op_not_implemented,
-    [COMMAND_READ_BINARY_INTEGER] = op_not_implemented,
-    [COMMAND_READ_BINARY_FLOATING] = op_not_implemented,
+    [COMMAND_READ_CHAR] = op_read_char,
+    [COMMAND_READ_INTEGER] = op_read_integer,
+    [COMMAND_READ_FLOATING] = op_read_floating,
+    [COMMAND_READ_BINARY_INTEGER] = op_read_binary_integer,
+    [COMMAND_READ_BINARY_FLOATING] = op_read_binary_floating,
     [COMMAND_PRINT_STRING] = op_print_string,
-    [COMMAND_PRINT_CHAR] = op_not_implemented,
+    [COMMAND_PRINT_CHAR] = op_print_char,
     [(COMMAND_PRINT_CHAR + 1) ... 255] = op_unknown
 };
 
