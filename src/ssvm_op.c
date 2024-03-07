@@ -209,8 +209,9 @@ void* op_fp_round(void* sp, FILE* fd, int* error) {
 }
 
 void* op_malloc(void* sp, FILE* fd, int* error) {
-    // *vm.sp = (uint64_t)malloc(*vm.sp);
-    return op_stub(sp, fd, error);
+    uint64_t* sp_u64 = sp;
+    *sp_u64 = (uint64_t)malloc(*sp_u64);
+    return sp;
 }
 
 void* op_load(void* sp, FILE* fd, int* error) {
@@ -304,6 +305,12 @@ void* op_jump(void* sp, FILE* fd, int* error) {
         }
         fseek(fd, pos + offset, SEEK_SET);
     }
+    return sp;
+}
+
+void* op_print_string(void* sp, FILE* fd, int* error) {
+    char** str_ptr = sp;
+    printf("%s", *str_ptr);
     return sp;
 }
 

@@ -42,6 +42,12 @@ void* op_print_all(void* sp, FILE* fd, int* error);
 void* op_print_fp(void* sp, FILE* fd, int* error);
 
 void* op_jump(void* sp, FILE* fd, int* error);
+void* op_jump_e(void* sp, FILE* fd, int* error);
+void* op_jump_ne(void* sp, FILE* fd, int* error);
+void* op_jump_g(void* sp, FILE* fd, int* error);
+void* op_jump_ge(void* sp, FILE* fd, int* error);
+void* op_jump_l(void* sp, FILE* fd, int* error);
+void* op_jump_le(void* sp, FILE* fd, int* error);
 
 void* op_right_shift(void* sp, FILE* fd, int* error);
 void* op_swap(void* sp, FILE* fd, int* error);
@@ -53,6 +59,8 @@ void* op_to_integer(void* sp, FILE* fd, int* error);
 void* op_call_c(void* sp, FILE* fd, int* error);
 void* op_load_native_fn(void* sp, FILE* fd, int* error);
 void* op_assert(void* sp, FILE* fd, int* error);
+
+void* op_print_string(void* sp, FILE* fd, int* error);
 
 void* op_stub(void* sp, FILE* fd, int* error);
 void* op_not_implemented(void* sp, FILE* fd, int* error);
@@ -97,7 +105,7 @@ ssvm_atom opcode_matrix[256] = {
     [COMMAND_FREE] = op_free,
     [COMMAND_PRINT_ALL] = op_print_all,
     [COMMAND_PRINT_FP] = op_print_fp,
-    [COMMAND_JUMP] = op_not_implemented,
+    [COMMAND_JUMP] = op_jump,
     [COMMAND_JUMP_IF_ZERO ... COMMAND_JUMP_IF_LESS_OR_EQUAL] = op_not_implemented,
     [COMMAND_RIGHT_SHIFT] = op_right_shift,
     [COMMAND_LEFT_SHIFT] = op_left_shift,
@@ -113,7 +121,7 @@ ssvm_atom opcode_matrix[256] = {
     [COMMAND_READ_FLOATING] = op_not_implemented,
     [COMMAND_READ_BINARY_INTEGER] = op_not_implemented,
     [COMMAND_READ_BINARY_FLOATING] = op_not_implemented,
-    [COMMAND_PRINT_STRING] = op_not_implemented,
+    [COMMAND_PRINT_STRING] = op_print_string,
     [COMMAND_PRINT_CHAR] = op_not_implemented,
     [(COMMAND_PRINT_CHAR + 1) ... 255] = op_unknown
 };
