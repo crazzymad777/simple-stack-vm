@@ -187,7 +187,7 @@ int ssvm_branches_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 			printf("%s", (char*)*vm.sp);
 		} else if (c == COMMAND_PRINT_CHAR) {
 			putchar(*vm.sp);
-		} else if (c == COMMAND_CALL) {
+		} else if (c == COMMAND_CALL || c == COMMAND_COMPARE_FP || c == COMMAND_EOF) {
 			*vm_ptr = vm;
 			fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
 			return -5;

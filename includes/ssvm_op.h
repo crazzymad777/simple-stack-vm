@@ -130,7 +130,9 @@ ssvm_atom opcode_matrix[256] = {
     [COMMAND_READ_BINARY_FLOATING] = op_read_binary_floating,
     [COMMAND_PRINT_STRING] = op_print_string,
     [COMMAND_PRINT_CHAR] = op_print_char,
-    [(COMMAND_PRINT_CHAR + 1) ... 255] = op_unknown
+    [COMMAND_COMPARE_FP] = op_not_implemented,
+    [COMMAND_EOF] = op_not_implemented,
+    [(COMMAND_EOF + 1) ... 255] = op_unknown
 };
 
 #endif

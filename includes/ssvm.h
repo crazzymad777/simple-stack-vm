@@ -86,6 +86,9 @@
 #define COMMAND_PRINT_STRING 0x86
 #define COMMAND_PRINT_CHAR 0x87
 
+#define COMMAND_COMPARE_FP 0x88
+#define COMMAND_EOF 0x89
+
 struct vm_state {
 	union {
 		uint64_t* sp; // stack pointer

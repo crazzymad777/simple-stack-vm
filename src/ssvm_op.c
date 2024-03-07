@@ -308,6 +308,110 @@ void* op_jump(void* sp, FILE* fd, int* error) {
     return sp;
 }
 
+void* op_jump_e(void* sp, FILE* fd, int* error) {
+    long pos = ftell(fd) - 1;
+    uint64_t offset;
+    int bytes = fread(&offset, 8, 1, fd);
+    if (bytes == 1) {
+        int64_t* value_ptr = sp;
+        if (*value_ptr == 0) {
+            if (offset == 0) {
+                *error = -6;
+                return sp;
+            }
+            fseek(fd, pos + offset, SEEK_SET);
+        }
+    }
+    return sp;
+}
+
+void* op_jump_ne(void* sp, FILE* fd, int* error) {
+    long pos = ftell(fd) - 1;
+    uint64_t offset;
+    int bytes = fread(&offset, 8, 1, fd);
+    if (bytes == 1) {
+        int64_t* value_ptr = sp;
+        if (*value_ptr != 0) {
+            if (offset == 0) {
+                *error = -6;
+                return sp;
+            }
+            fseek(fd, pos + offset, SEEK_SET);
+        }
+    }
+    return sp;
+}
+
+void* op_jump_g(void* sp, FILE* fd, int* error) {
+    long pos = ftell(fd) - 1;
+    uint64_t offset;
+    int bytes = fread(&offset, 8, 1, fd);
+    if (bytes == 1) {
+        int64_t* value_ptr = sp;
+        if (*value_ptr > 0) {
+            if (offset == 0) {
+                *error = -6;
+                return sp;
+            }
+            fseek(fd, pos + offset, SEEK_SET);
+        }
+    }
+    return sp;
+}
+
+void* op_jump_ge(void* sp, FILE* fd, int* error) {
+    long pos = ftell(fd) - 1;
+    uint64_t offset;
+    int bytes = fread(&offset, 8, 1, fd);
+    if (bytes == 1) {
+        int64_t* value_ptr = sp;
+        if (*value_ptr >= 0) {
+            if (offset == 0) {
+                *error = -6;
+                return sp;
+            }
+            fseek(fd, pos + offset, SEEK_SET);
+        }
+    }
+    return sp;
+}
+
+void* op_jump_l(void* sp, FILE* fd, int* error) {
+    long pos = ftell(fd) - 1;
+    uint64_t offset;
+    int bytes = fread(&offset, 8, 1, fd);
+    if (bytes == 1) {
+        int64_t* value_ptr = sp;
+        if (*value_ptr < 0) {
+            if (offset == 0) {
+                *error = -6;
+                return sp;
+            }
+            fseek(fd, pos + offset, SEEK_SET);
+        }
+    }
+    return sp;
+}
+
+void* op_jump_le(void* sp, FILE* fd, int* error) {
+    long pos = ftell(fd) - 1;
+    uint64_t offset;
+    int bytes = fread(&offset, 8, 1, fd);
+    if (bytes == 1) {
+        int64_t* value_ptr = sp;
+        if (*value_ptr <= 0) {
+            if (offset == 0) {
+                *error = -6;
+                return sp;
+            }
+            fseek(fd, pos + offset, SEEK_SET);
+        }
+    }
+    return sp;
+}
+
+// fp comparison  ?
+
 void* op_read_char(void* sp, FILE* fd, int* error) {
     sp += sizeof(uint64_t);
     int64_t* char_ptr = sp;
