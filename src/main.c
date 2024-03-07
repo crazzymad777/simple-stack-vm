@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
 		return -2;
 	}
 
-	clock_t begin = clock();
+	//clock_t begin = clock();
 	struct vm_state vm;
 	uint64_t* stack = malloc(4096);
 	vm.operand_size = sizeof(uint64_t);
@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
 	*vm.sp = (uint64_t)NULL;
 	ssvm_matrix_call(vm, fd, stack);
 	free(stack);
-	printf("%d ms\n", clock()-begin);
+	//printf("%d ms\n", clock()-begin);
 
 	if (stdin != fd) {
 		fclose(fd);
