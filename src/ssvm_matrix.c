@@ -1,22 +1,36 @@
 #include "ssvm_matrix.h"
 #include "ssvm_op.h"
+#include "ffi.h"
 
 int ssvm_matrix_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
+	ffi_cif cif;
+	ffi_status status;
 	struct vm_state vm = *vm_ptr;
 
 	int c = fgetc(fd);
 	if (c != EOF) {
 		int error_code = 0;
-		vm.sp = opcode_matrix[c](vm.sp, fd, &error_code);
-		if (error_code != 0) {
-			if (error_code == -4) {
-				fprintf(stderr, "Error! Unknown opcode: 0x%x\n", c);
-			} else if (error_code == -5) {
-				fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
-			}
+		if (c == COMMAND_FFI_PREPARE) {
+			int n = *vm.sp;
 
-			*vm_ptr = vm;
-			return error_code;
+			if ((status = ffi_prep_cif(&cif, FFI_DEFAULT_ABI, n, NULL, NULL)) != FFI_OK)
+			{
+				// Handle the ffi_status error.
+			}
+		} else if (c == COMMAND_FFI_CALL) {
+
+		} else {
+			vm.sp = opcode_matrix[c](vm.sp, fd, &error_code);
+			if (error_code != 0) {
+				if (error_code == -4) {
+					fprintf(stderr, "Error! Unknown opcode: 0x%x\n", c);
+				} else if (error_code == -5) {
+					fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
+				}
+
+				*vm_ptr = vm;
+				return error_code;
+			}
 		}
 	}
 	*vm_ptr = vm;

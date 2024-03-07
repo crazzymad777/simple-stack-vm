@@ -81,6 +81,22 @@
 #define COMMAND_CHANGE_STACK 52
 // #define COMMAND_NEW_STACK 53
 
+#define COMMAND_FFI_PREPARE 54
+#define COMMAND_FFI_CALL 55
+
+#define SSVM_FFI_TYPE_VOID       0
+#define SSVM_FFI_TYPE_INT        1
+#define SSVM_FFI_TYPE_FLOAT      2
+#define SSVM_FFI_TYPE_DOUBLE     3
+#define SSVM_FFI_TYPE_UINT8      5
+#define SSVM_FFI_TYPE_SINT8      6
+#define SSVM_FFI_TYPE_UINT16     7
+#define SSVM_FFI_TYPE_SINT16     8
+#define SSVM_FFI_TYPE_UINT32     9
+#define SSVM_FFI_TYPE_SINT32     10
+#define SSVM_FFI_TYPE_UINT64     11
+#define SSVM_FFI_TYPE_SINT64     12
+
 struct vm_state {
 	union {
 		uint64_t* sp; // stack pointer

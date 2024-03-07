@@ -110,6 +110,9 @@ ssvm_atom opcode_matrix[256] = {
     [COMMAND_ASSERT] = op_assert,
     [COMMAND_GET_SP] = op_not_implemented,
     [COMMAND_CHANGE_STACK] = op_not_implemented,
+    [53] = op_unknown,
+    [COMMAND_FFI_PREPARE] = op_not_implemented,
+    [COMMAND_FFI_CALL] = op_not_implemented,
     [(COMMAND_CHANGE_STACK + 1) ... 255] = op_unknown
 };
 
