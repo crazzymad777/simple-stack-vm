@@ -124,6 +124,84 @@ int ssvm_branches_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 				}
 				fseek(fd, pos + offset, SEEK_SET);
 			}
+		} else if (c == COMMAND_JUMP_IF_ZERO) {
+			long pos = ftell(fd) - 1;
+			uint64_t offset;
+			int bytes = fread(&offset, 8, 1, fd);
+			if (bytes == 1) {
+				if (*vm.sp_s == 0) {
+					if (offset == 0) {
+						fprintf(stderr, "Simple Stack VM halt!\n");
+						return -6;
+					}
+					fseek(fd, pos + offset, SEEK_SET);
+				}
+			}
+		} else if (c == COMMAND_JUMP_IF_NON_ZERO) {
+			long pos = ftell(fd) - 1;
+			uint64_t offset;
+			int bytes = fread(&offset, 8, 1, fd);
+			if (bytes == 1) {
+				if (*vm.sp_s != 0) {
+					if (offset == 0) {
+						fprintf(stderr, "Simple Stack VM halt!\n");
+						return -6;
+					}
+					fseek(fd, pos + offset, SEEK_SET);
+				}
+			}
+		} else if (c == COMMAND_JUMP_IF_GREAT) {
+			long pos = ftell(fd) - 1;
+			uint64_t offset;
+			int bytes = fread(&offset, 8, 1, fd);
+			if (bytes == 1) {
+				if (*vm.sp_s > 0) {
+					if (offset == 0) {
+						fprintf(stderr, "Simple Stack VM halt!\n");
+						return -6;
+					}
+					fseek(fd, pos + offset, SEEK_SET);
+				}
+			}
+		} else if (c == COMMAND_JUMP_IF_LESS) {
+			long pos = ftell(fd) - 1;
+			uint64_t offset;
+			int bytes = fread(&offset, 8, 1, fd);
+			if (bytes == 1) {
+				if (*vm.sp_s < 0) {
+					if (offset == 0) {
+						fprintf(stderr, "Simple Stack VM halt!\n");
+						return -6;
+					}
+					fseek(fd, pos + offset, SEEK_SET);
+				}
+			}
+		} else if (c == COMMAND_JUMP_IF_GREAT_OR_EQUAL) {
+			long pos = ftell(fd) - 1;
+			uint64_t offset;
+			int bytes = fread(&offset, 8, 1, fd);
+			if (bytes == 1) {
+				if (*vm.sp_s >= 0) {
+					if (offset == 0) {
+						fprintf(stderr, "Simple Stack VM halt!\n");
+						return -6;
+					}
+					fseek(fd, pos + offset, SEEK_SET);
+				}
+			}
+		} else if (c == COMMAND_JUMP_IF_LESS_OR_EQUAL) {
+			long pos = ftell(fd) - 1;
+			uint64_t offset;
+			int bytes = fread(&offset, 8, 1, fd);
+			if (bytes == 1) {
+				if (*vm.sp_s <= 0) {
+					if (offset == 0) {
+						fprintf(stderr, "Simple Stack VM halt!\n");
+						return -6;
+					}
+					fseek(fd, pos + offset, SEEK_SET);
+				}
+			}
 		} else if (c == COMMAND_CALL_C) {
 			// USE libffi
 			*vm_ptr = vm;
