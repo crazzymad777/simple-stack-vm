@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
-	const char* protect_field = "PROTECT0";
+	const char* protect_field = "PROTECT1";
 	char buffer[9] = {0};
 	int b = fread(buffer, 8, 1, fd);
 	if (b < 1) {
@@ -45,8 +45,15 @@ int main(int argc, char* argv[]) {
 		return -2;
 	}
 
+	size_t stack_size = 0;
+	fread(&stack_size, 8, 1, fd);
+
+	if (stack_size == 0) {
+		stack_size = 4096;
+	}
+
 	struct vm_state vm;
-	uint64_t* stack = malloc(4096);
+	uint64_t* stack = malloc(stack_size);
 	vm.operand_size = sizeof(uint64_t);
 	vm.sp = stack;
 	*vm.sp = (uint64_t)NULL;
