@@ -54,6 +54,12 @@ int main(int argc, char* argv[]) {
 
 	struct vm_state vm;
 	uint64_t* stack = malloc(stack_size);
+
+	if (stack == NULL) {
+		perror("Couldn;t allocate stack.");
+		return -6;
+	}
+
 	vm.operand_size = sizeof(uint64_t);
 	vm.sp = stack;
 	*vm.sp = (uint64_t)NULL;
