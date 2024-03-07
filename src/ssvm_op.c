@@ -457,6 +457,19 @@ void* op_print_char(void* sp, FILE* fd, int* error) {
 
 void* op_compare_fp(void* sp, FILE* fd, int* error) {
     return op_stub(sp, fd, error);
+    /*double* left_double = sp-sizeof(uint64_t);
+    double* right_double = sp;
+    int64_t* result = sp;
+    if (*left_double > *right_double) {
+        *result = 1;
+    } else if (*left_double < *right_double) {
+        *result = -1;
+    } else if (*left_double == *right_double) {
+        *result = 0;
+    } else if (*left_double != *right_double) {
+        *result = 0;
+    }
+    return sp;*/
 }
 
 void* op_eof(void* sp, FILE* fd, int* error) {
