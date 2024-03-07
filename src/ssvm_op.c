@@ -293,6 +293,20 @@ void* op_assert(void* sp, FILE* fd, int* error) {
     return sp;
 }
 
+void* op_jump(void* sp, FILE* fd, int* error) {
+    long pos = ftell(fd) - 1;
+    uint64_t offset;
+    int bytes = fread(&offset, 8, 1, fd);
+    if (bytes == 1) {
+        if (offset == 0) {
+            *error = -6;
+            return sp;
+        }
+        fseek(fd, pos + offset, SEEK_SET);
+    }
+    return sp;
+}
+
 void* op_stub(void* sp, FILE* fd, int* error) {
     *error = -8;
     return sp;

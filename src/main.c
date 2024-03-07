@@ -57,22 +57,23 @@ int main(int argc, char* argv[]) {
 
 	if (stack == NULL) {
 		perror("Couldn't allocate stack.");
-		return -6;
+		return -7;
 	}
 
 	vm.operand_size = sizeof(uint64_t);
 	vm.sp = stack;
 	*vm.sp = (uint64_t)NULL;
 
+	int exit_code;
 	if (matrix == 1) {
-		ssvm_matrix_call(vm, fd, stack);
+		exit_code = ssvm_matrix_call(vm, fd, stack);
 	} else {
-		ssvm_branches_call(vm, fd, stack);
+		exit_code = ssvm_branches_call(vm, fd, stack);
 	}
 	free(stack);
 
 	if (stdin != fd) {
 		fclose(fd);
 	}
-	return 0;
+	return exit_code;
 }

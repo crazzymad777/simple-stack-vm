@@ -159,10 +159,34 @@ int ssvm_branches_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
                 *vm_ptr = vm;
                 return -16;
             }
-        } else if (c >= COMMAND_READ_CHAR && c <=COMMAND_PRINT_CHAR) {
-			*vm_ptr = vm;
-			fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
-			return -5;
+        } else if (c == COMMAND_READ_CHAR) {
+			int new_char = getchar();
+			vm.sp += sizeof(uint64_t);
+			*vm.sp = new_char;
+		} else if (c == COMMAND_READ_INTEGER) {
+			int64_t new_int;
+			scanf("%ld", &new_int);
+			vm.sp += sizeof(uint64_t);
+			*vm.sp = new_int;
+		} else if (c == COMMAND_READ_FLOATING) {
+			double new_double;
+			scanf("%lf", &new_double);
+			vm.sp += sizeof(uint64_t);
+			*vm.sp_f64 = new_double;
+		} else if (c == COMMAND_READ_BINARY_INTEGER) {
+			int64_t new_int;
+			fread(&new_int, sizeof(new_int), 1, stdin);
+			vm.sp += sizeof(new_int);
+			*vm.sp = new_int;
+		} else if (c == COMMAND_READ_BINARY_FLOATING) {
+			double new_double;
+			fread(&new_double, sizeof(new_double), 1, stdin);
+			vm.sp += sizeof(new_double);
+			*vm.sp_f64 = new_double;
+		} else if (c == COMMAND_PRINT_STRING) {
+			printf("%s", (char*)*vm.sp);
+		} else if (c == COMMAND_PRINT_CHAR) {
+			putchar(*vm.sp);
 		} else if (c == COMMAND_CALL) {
 			*vm_ptr = vm;
 			fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);

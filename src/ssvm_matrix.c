@@ -13,6 +13,8 @@ int ssvm_matrix_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 				fprintf(stderr, "Error! Unknown opcode: 0x%x\n", c);
 			} else if (error_code == -5) {
 				fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
+			} else if (error_code == -6) {
+				fprintf(stderr, "Simple Stack VM halt!\n");
 			}
 
 			*vm_ptr = vm;
