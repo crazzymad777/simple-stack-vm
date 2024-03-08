@@ -11,7 +11,7 @@
 #include "math.h"
 
 int main(int argc, char* argv[]) {
-	int matrix = 1;
+	int matrix = 0;
 
 	FILE* fd = stdin;
 	if (argc > 1) {

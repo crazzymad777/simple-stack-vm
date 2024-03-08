@@ -45,10 +45,10 @@ void* op_seek_sp(void* sp, FILE* fd, int* error) {
 }
 
 void* op_add(void* sp, FILE* fd, int* error) {
-    uint64_t* x = sp-sizeof(uint64_t);
+    uint64_t* x = sp-1;
     uint64_t* y = sp;
     *x = *x + *y;
-    sp = sp-sizeof(uint64_t);
+    sp = sp-1;
     return sp;
 }
 

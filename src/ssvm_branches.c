@@ -289,16 +289,13 @@ int ssvm_branches_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 }
 
 int ssvm_branches_call(struct vm_state vm, FILE* fd, void* stack) {
-	printf("ssvm_branches_call(%x,%x,%x)\n", &vm, fd, stack);
 	while (!feof(fd)) {
 		int r = ssvm_branches_execute(&vm, fd, stack);
 		if (r == -42) {
-			//printf("ret code: %d\n", r);
 			return -42;
 		}
 
 		if (r != 0) {
-			//printf("ret code: %d\n", r);
 			return r;
 		}
 	}

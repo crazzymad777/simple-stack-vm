@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
     ofs << protect_field;
     ofs.write((char*)&stack_size, sizeof(stack_size));
 
-
+    std::vector<ssvm_command> linked_commands;
     std::vector<ssvm_command> commands;
     std::map<std::string, int> label_to_command_index;
     std::string word;
@@ -89,6 +89,7 @@ int main(int argc, char* argv[]) {
                     std::cin >> linked_label;
 
                     command = ssvm_command(opcode, linked_label, offset);
+                    linked_commands.push_back(command);
                 }
             }
 
@@ -104,7 +105,7 @@ int main(int argc, char* argv[]) {
 
     std::cerr << "Linking..." << std::endl;
 
-    for (auto& x : commands) {
+    for (auto& x : linked_commands) {
         if (x.kind == ssvm_command::LINKED_OPCODE) {
             int64_t offset = x.offset;
             std::string label = x.linked_label;
