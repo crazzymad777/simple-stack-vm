@@ -10,7 +10,8 @@ public:
     };
 
     ssvm_command() {
-
+        this->kind = SINGLE_OPCODE;
+        linked_label = "";
     }
 
     ssvm_command(int opcode, uint64_t offset) {
@@ -38,6 +39,7 @@ public:
         this->kind = LINKED_OPCODE;
         this->linked_label = label;
         this->offset = offset;
+        this->const_value = -1;
     }
 
     int length() {

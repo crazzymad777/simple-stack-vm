@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
     ofs.write((char*)&stack_size, sizeof(stack_size));
 
 
-    std::list<ssvm_command> commands;
+    std::vector<ssvm_command> commands;
     std::map<std::string, int> label_to_command_index;
     std::string word;
     // COMMAND:
@@ -35,6 +35,7 @@ int main(int argc, char* argv[]) {
     bool ignore_unknown_word;
     uint64_t offset = 0;
 
+    std::cerr << "Parsing..." << std::endl;
     while (!std::cin.eof()) {
         word = "";
         ignore_unknown_word = false;
@@ -79,15 +80,50 @@ int main(int argc, char* argv[]) {
                 std::cerr << "Not implemented: " + word << std::endl;
                 return -43;
             } else if (optype == 3) { // relative to other command (probably label)
-                std::cerr << "Not implemented: " + word << std::endl;
-                return -43;
+                int64_t const_value = -1;
+                std::string linked_label;
+                if (std::cin >> const_value) {
+                    command = ssvm_command(opcode, const_value, offset);
+                } else {
+                    std::cin.clear();
+                    std::cin >> linked_label;
+
+                    command = ssvm_command(opcode, linked_label, offset);
+                }
             }
+
             commands.push_back(command);
             command.write_command(ofs);
             offset += command.length();
+            // std::cout << command.opcode << std::endl;
         } else if (!ignore_unknown_word && word != "") {
             std::cerr << "Unknown word: " + word << std::endl;
             return -42;
+        }
+    }
+
+    std::cerr << "Linking..." << std::endl;
+
+    for (auto& x : commands) {
+        if (x.kind == ssvm_command::LINKED_OPCODE) {
+            int64_t offset = x.offset;
+            std::string label = x.linked_label;
+            if (label_to_command_index.count(label) < 1) {
+                std::cerr << "Label not found: " + label << std::endl;
+                return -44;
+            } else {
+                int index = label_to_command_index[label];
+                int64_t other_offset = commands[index].offset;
+                int64_t relative = other_offset - offset;
+                std::cout << relative << std::endl;
+
+                std::streampos p = ofs.tellp();
+                ofs.seekp(16 + offset + 1);
+                ofs.write((char*)&relative, sizeof(int64_t));
+                ofs.seekp(p);
+                x.kind = ssvm_command::OPCODE_WITH_CONST;
+                x.const_value = relative;
+            }
         }
     }
 
