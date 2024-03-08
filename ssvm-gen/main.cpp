@@ -36,6 +36,7 @@ int main(int argc, char* argv[]) {
     uint64_t offset = 0;
 
     while (!std::cin.eof()) {
+        word = "";
         ignore_unknown_word = false;
         label = "";
         has_label = false;
@@ -65,11 +66,26 @@ int main(int argc, char* argv[]) {
 
         if (opcodes.count(word) > 0) {
             int opcode = opcodes[word];
-            auto command = ssvm_command(opcode, offset);
+            int optype = opcodes_types[opcode];
+
+            ssvm_command command;
+            if (optype == 0) {
+                command = ssvm_command(opcode, offset);
+            } if (optype == 1) { // const
+                int64_t const_value;
+                std::cin >> const_value;
+                command = ssvm_command(opcode, const_value, offset);
+            } else if (optype == 2) { // vector
+                std::cerr << "Not implemented: " + word << std::endl;
+                return -43;
+            } else if (optype == 3) { // relative to other command (probably label)
+                std::cerr << "Not implemented: " + word << std::endl;
+                return -43;
+            }
             commands.push_back(command);
             command.write_command(ofs);
             offset += command.length();
-        } else if (!ignore_unknown_word) {
+        } else if (!ignore_unknown_word && word != "") {
             std::cerr << "Unknown word: " + word << std::endl;
             return -42;
         }

@@ -9,6 +9,10 @@ public:
         LINKED_OPCODE // relative position
     };
 
+    ssvm_command() {
+
+    }
+
     ssvm_command(int opcode, uint64_t offset) {
         this->opcode = opcode;
         this->kind = SINGLE_OPCODE;
