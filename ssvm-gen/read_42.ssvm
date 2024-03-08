@@ -1,0 +1,6 @@
+w: read_int 
+push 42
+sub 
+print
+jne w
+
