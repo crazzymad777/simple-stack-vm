@@ -90,6 +90,10 @@
 #define COMMAND_EOF 0x89
 #define COMMAND_IS_NAN 0x8a
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct vm_state {
 	union {
 		uint64_t* sp; // stack pointer
@@ -100,6 +104,10 @@ struct vm_state {
 	};
 	size_t operand_size;
 };
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 
