@@ -1,0 +1,18 @@
+read_int
+call factorial
+print
+jmp exit
+
+factorial: je factorial_one
+clone
+push 1
+sub
+call factorial
+mul
+ret
+
+factorial_one: omit
+push 1
+ret
+
+exit: ret
