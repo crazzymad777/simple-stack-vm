@@ -26,7 +26,7 @@ public:
         this->vec = vec;
     }
 
-    ssvm_command(int opcode, std:string label) {
+    ssvm_command(int opcode, std::string label) {
         this->opcode = opcode;
         this->kind = LINKED_OPCODE;
         this->linked_label = label;

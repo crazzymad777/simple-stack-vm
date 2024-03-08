@@ -19,11 +19,25 @@ int main(int argc, char* argv[]) {
     }
 
     uint64_t stack_size = 0;
-    ofs << "PROTECT1";
+    const char* protect_field = "PROTECT1";
+    ofs << protect_field;
     ofs.write((char*)&stack_size, sizeof(stack_size));
 
+    std::string word;
     // COMMAND:
     // (label:) command (N,value|value)
+    while (!std::cin.eof()) {
+        std::cin >> word;
+        if (word == ".stack") {
+            uint64_t s;
+            if (std::cin >> s) {
+                std::streampos p = ofs.tellp();
+                ofs.seekp(8);
+                ofs.write((char*)&s, sizeof(uint64_t));
+                ofs.seekp(p);
+            }
+        }
+    }
 
     ofs.close();
     return 0;
