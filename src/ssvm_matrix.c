@@ -6,8 +6,14 @@ int ssvm_matrix_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 
 	int c = fgetc(fd);
 	if (c != EOF) {
+		// printf("%x : %x\n", ftell(fd), c);
 		int error_code = 0;
 		vm.sp = opcode_matrix[c](vm.sp, fd, &error_code);
+		if (error_code == -42) {
+			// *vm_ptr = vm;
+			return 0;
+		}
+
 		if (error_code != 0) {
 			if (error_code == -4) {
 				fprintf(stderr, "Error! Unknown opcode: 0x%x\n", c);
@@ -30,7 +36,13 @@ int ssvm_matrix_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 int ssvm_matrix_call(struct vm_state vm, FILE* fd, void* stack) {
 	while (!feof(fd)) {
 		int r = ssvm_matrix_execute(&vm, fd, stack);
+		if (r == -42) {
+			//printf("ret code: %d\n", r);
+			return -42;
+		}
+
 		if (r != 0) {
+			//printf("ret code: %d\n", r);
 			return r;
 		}
 	}

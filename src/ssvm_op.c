@@ -286,12 +286,13 @@ void* op_call(void* sp, FILE* fd, int* error) {
 
         fseek(fd, pos + offset, SEEK_SET);
     }
-    *error = ssvm_matrix_execute(&vm, fd, sp);
-    fseek(fd, pos + 1, SEEK_SET);
+    *error = ssvm_matrix_call(vm, fd, sp);
+    fseek(fd, pos + 9, SEEK_SET);
     return sp;
 }
 
 void* op_ret(void* sp, FILE* fd, int* error) {
+    *error = -42;
     return sp;
 }
 

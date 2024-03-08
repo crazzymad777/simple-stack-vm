@@ -66,9 +66,6 @@
 #define COMMAND_TO_FP_S 0x2e // signed
 #define COMMAND_TO_INTEGER 0x2f // convert floating point to integer
 
-#define COMMAND_CALL_C 0x30
-#define COMMAND_LOAD_NATIVE_FN 0x31
-
 #define COMMAND_ASSERT 0x32
 
 #define COMMAND_READ_CHAR 0x81

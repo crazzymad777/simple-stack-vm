@@ -9,6 +9,8 @@ int ssvm_branches_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 
 	int c = fgetc(fd);
 	if (c != EOF) {
+		// printf("%x : %x\n", ftell(fd), c);
+
 		if (c == COMMAND_PUSH) {
 			uint64_t piece;
 			int bytes = fread(&piece, 8, 1, fd);
@@ -264,8 +266,11 @@ int ssvm_branches_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 
 			struct vm_state vm_callee;
 			vm_callee.sp = vm.sp;
-			int exit_code = ssvm_branches_execute(&vm_callee, fd, vm.sp);
-			fseek(fd, pos + 1, SEEK_SET);
+			int exit_code = ssvm_branches_call(vm_callee, fd, vm.sp);
+			if (exit_code == -42) {
+				exit_code = 0;
+			}
+			fseek(fd, pos + 9, SEEK_SET);
 			*vm_ptr = vm;
 			return exit_code;
 		} else if (c == COMMAND_COMPARE_FP) {
@@ -273,7 +278,8 @@ int ssvm_branches_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 			fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
 			return -5;
 		} else if (c == COMMAND_RET) {
-			return 0;
+			// *vm_ptr = vm;
+			return -42;
 		} else {
 			*vm_ptr = vm;
 			fprintf(stderr, "Error! Unknown opcode: 0x%x\n", c);
@@ -287,7 +293,13 @@ int ssvm_branches_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 int ssvm_branches_call(struct vm_state vm, FILE* fd, void* stack) {
 	while (!feof(fd)) {
 		int r = ssvm_branches_execute(&vm, fd, stack);
+		if (r == -42) {
+			//printf("ret code: %d\n", r);
+			return -42;
+		}
+
 		if (r != 0) {
+			//printf("ret code: %d\n", r);
 			return r;
 		}
 	}
