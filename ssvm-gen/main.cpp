@@ -33,6 +33,8 @@ int main(int argc, char* argv[]) {
     std::string label;
     bool has_label;
     bool ignore_unknown_word;
+    uint64_t offset = 0;
+
     while (!std::cin.eof()) {
         ignore_unknown_word = false;
         label = "";
@@ -63,6 +65,10 @@ int main(int argc, char* argv[]) {
 
         if (opcodes.count(word) > 0) {
             int opcode = opcodes[word];
+            auto command = ssvm_command(opcode, offset);
+            commands.push_back(command);
+            command.write_command(ofs);
+            offset += command.length();
         } else if (!ignore_unknown_word) {
             std::cerr << "Unknown word: " + word << std::endl;
             return -42;
