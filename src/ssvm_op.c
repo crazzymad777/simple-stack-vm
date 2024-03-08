@@ -74,26 +74,27 @@ void* op_sub(void* sp, FILE* fd, int* error) {
 }
 
 void* op_mul(void* sp, FILE* fd, int* error) {
-    uint64_t* usp = sp;
-    *(usp-sizeof(uint64_t)) = *(usp-sizeof(uint64_t)) * *usp;
-	usp = usp-sizeof(uint64_t);
-    return usp;
+    uint64_t* x = sp;
+    uint64_t* y = sp;
+    x -= sizeof(uint64_t); // ?????????????????????
+    *x = *x * *y;
+    return x;
 }
 
 void* op_div(void* sp, FILE* fd, int* error) {
-    uint64_t* x = sp-sizeof(uint64_t);
+    uint64_t* x = sp;
     uint64_t* y = sp;
+    x -= sizeof(uint64_t); // ?????????????????????
     *x = *x / *y;
-    sp = sp-sizeof(uint64_t);
-    return sp;
+    return x;
 }
 
 void* op_rem(void* sp, FILE* fd, int* error) {
-    uint64_t* x = sp-sizeof(uint64_t);
+    uint64_t* x = sp;
     uint64_t* y = sp;
+    x -= sizeof(uint64_t); // ?????????????????????
     *x = *x % *y;
-    sp = sp-sizeof(uint64_t);
-    return sp;
+    return x;
 }
 
 void* op_bitwise_and(void* sp, FILE* fd, int* error) {
@@ -121,10 +122,11 @@ void* op_bitwise_xor(void* sp, FILE* fd, int* error) {
 }
 
 void* op_clone(void* sp, FILE* fd, int* error) {
-    uint64_t* value = sp;
-    value += sizeof(uint64_t);
-    *value = *(value-sizeof(uint64_t));
-    return value;
+    uint64_t* x = sp;
+    uint64_t* y = sp;
+    x += sizeof(uint64_t); // ?????????????????????
+    *x = *y;
+    return x;
 }
 
 void* op_take(void* sp, FILE* fd, int* error) {
