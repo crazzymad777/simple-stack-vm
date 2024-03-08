@@ -13,12 +13,12 @@ int ssvm_branches_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 			uint64_t piece;
 			int bytes = fread(&piece, 8, 1, fd);
 			if (bytes == 1) {
-				vm.sp += sizeof(uint64_t);
+				vm.sp += 1;
 				*vm.sp = piece;
 			}
 		} else if (c == COMMAND_POP) {
-			**vm.sp_ptr = *(vm.sp-sizeof(uint64_t));
-			vm.sp -= sizeof(uint64_t) * 2;
+			**vm.sp_ptr = *(vm.sp-1);
+			vm.sp -= 1 * 2;
 		} else if (c == COMMAND_PRINT) {
 			printf("%ld : %lx\n", *vm.sp, *vm.sp);
 		} else if (c == COMMAND_PRINT_FP) {
@@ -27,69 +27,69 @@ int ssvm_branches_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 			int64_t piece;
 			int bytes = fread(&piece, 8, 1, fd);
 			if (bytes == 1) {
-				vm.sp += piece * sizeof(uint64_t);
+				vm.sp += piece * 1;
 			}
 		} else if (c == COMMAND_ADD) {
-			*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) + *vm.sp;
-			vm.sp = vm.sp-sizeof(uint64_t);
+			*(vm.sp-1) = *(vm.sp-1) + *vm.sp;
+			vm.sp = vm.sp-1;
 		} else if (c == COMMAND_SUB) {
-			*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) - *vm.sp;
-			vm.sp = vm.sp-sizeof(uint64_t);
+			*(vm.sp-1) = *(vm.sp-1) - *vm.sp;
+			vm.sp = vm.sp-1;
 		} else if (c == COMMAND_MUL) {
-			*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) * *vm.sp;
-			vm.sp = vm.sp-sizeof(uint64_t);
+			*(vm.sp-1) = *(vm.sp-1) * *vm.sp;
+			vm.sp = vm.sp-1;
 		} else if (c == COMMAND_DIV) {
-			*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) / *vm.sp;
-			vm.sp = vm.sp-sizeof(uint64_t);
+			*(vm.sp-1) = *(vm.sp-1) / *vm.sp;
+			vm.sp = vm.sp-1;
 		} else if (c == COMMAND_REM) {
-			*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) % *vm.sp;
-			vm.sp = vm.sp-sizeof(uint64_t);
+			*(vm.sp-1) = *(vm.sp-1) % *vm.sp;
+			vm.sp = vm.sp-1;
 		} else if (c == COMMAND_BITWISE_AND) {
-			*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) & *vm.sp;
-			vm.sp = vm.sp-sizeof(uint64_t);
+			*(vm.sp-1) = *(vm.sp-1) & *vm.sp;
+			vm.sp = vm.sp-1;
 		} else if (c == COMMAND_BITWISE_OR) {
-			*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) | *vm.sp;
-			vm.sp = vm.sp-sizeof(uint64_t);
+			*(vm.sp-1) = *(vm.sp-1) | *vm.sp;
+			vm.sp = vm.sp-1;
 		} else if (c == COMMAND_BITWISE_XOR) {
-			*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) ^ *vm.sp;
-			vm.sp = vm.sp-sizeof(uint64_t);
+			*(vm.sp-1) = *(vm.sp-1) ^ *vm.sp;
+			vm.sp = vm.sp-1;
 		} else if (c == COMMAND_CLONE) {
 			uint64_t cell = *vm.sp;
-			vm.sp += sizeof(uint64_t);
+			vm.sp += 1;
 			*vm.sp = cell;
 		} else if (c == COMMAND_OMIT) {
-			vm.sp -= sizeof(uint64_t);
+			vm.sp -= 1;
 		} else if (c == COMMAND_MALLOC) {
 			*vm.sp = (uint64_t)malloc(*vm.sp);
 		} else if (c == COMMAND_FREE) {
 			free(vm.sp);
-			vm.sp = vm.sp-sizeof(uint64_t);
+			vm.sp = vm.sp-1;
 		} else if (c == COMMAND_PRINT_ALL) {
 			uint64_t *ptr = vm.sp;
 			do {
 				printf("0x%x: 0x%x\n", vm.sp-ptr, *ptr);
-				ptr -= sizeof(uint64_t);
+				ptr -= 1;
 			} while(ptr != stack);
 
 		} else if (c == COMMAND_FP_ADD) {
-			*(vm.sp_f64-sizeof(uint64_t)) = *(vm.sp_f64-sizeof(uint64_t)) + *vm.sp_f64;
-			vm.sp = vm.sp-sizeof(uint64_t);
+			*(vm.sp_f64-1) = *(vm.sp_f64-1) + *vm.sp_f64;
+			vm.sp = vm.sp-1;
 
 		} else if (c == COMMAND_FP_SUB) {
-			*(vm.sp_f64-sizeof(uint64_t)) = *(vm.sp_f64-sizeof(uint64_t)) - *vm.sp_f64;
-			vm.sp = vm.sp-sizeof(uint64_t);
+			*(vm.sp_f64-1) = *(vm.sp_f64-1) - *vm.sp_f64;
+			vm.sp = vm.sp-1;
 
 		} else if (c == COMMAND_FP_MUL) {
-			*(vm.sp_f64-sizeof(uint64_t)) = *(vm.sp_f64-sizeof(uint64_t)) * *vm.sp_f64;
-			vm.sp = vm.sp-sizeof(uint64_t);
+			*(vm.sp_f64-1) = *(vm.sp_f64-1) * *vm.sp_f64;
+			vm.sp = vm.sp-1;
 
 		} else if (c == COMMAND_FP_DIV) {
-			*(vm.sp_f64-sizeof(uint64_t)) = *(vm.sp_f64-sizeof(uint64_t)) / *vm.sp_f64;
-			vm.sp = vm.sp-sizeof(uint64_t);
+			*(vm.sp_f64-1) = *(vm.sp_f64-1) / *vm.sp_f64;
+			vm.sp = vm.sp-1;
 
 		} else if (c == COMMAND_FP_POWER) {
-			*(vm.sp_f64-sizeof(uint64_t)) = pow(*(vm.sp_f64-sizeof(uint64_t)), *vm.sp_f64);
-			vm.sp = vm.sp-sizeof(uint64_t);
+			*(vm.sp_f64-1) = pow(*(vm.sp_f64-1), *vm.sp_f64);
+			vm.sp = vm.sp-1;
 
 		} else if (c == COMMAND_FP_CEIL) {
 			*vm.sp_f64 = ceil(*vm.sp_f64);
@@ -98,15 +98,15 @@ int ssvm_branches_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 		} else if (c == COMMAND_TAKE) {
 			*vm.sp = **vm.sp_ptr;
 		} else if (c == COMMAND_RIGHT_SHIFT) {
-			*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) >> *vm.sp;
-			vm.sp = vm.sp-sizeof(uint64_t);
+			*(vm.sp-1) = *(vm.sp-1) >> *vm.sp;
+			vm.sp = vm.sp-1;
 		} else if (c == COMMAND_LEFT_SHIFT) {
-			*(vm.sp-sizeof(uint64_t)) = *(vm.sp-sizeof(uint64_t)) << *vm.sp;
-			vm.sp = vm.sp-sizeof(uint64_t);
+			*(vm.sp-1) = *(vm.sp-1) << *vm.sp;
+			vm.sp = vm.sp-1;
 		} else if (c == COMMAND_SWAP) {
 			uint64_t value = *vm.sp;
-			*vm.sp = *(vm.sp-sizeof(uint64_t));
-			*(vm.sp-sizeof(uint64_t)) = value;
+			*vm.sp = *(vm.sp-1);
+			*(vm.sp-1) = value;
 		} else if (c == COMMAND_TO_FP) {
 			*vm.sp_f64 = *vm.sp;
 		} else if (c == COMMAND_TO_FP_S) {
@@ -211,7 +211,7 @@ int ssvm_branches_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 				memcpy((void*)*vm.sp, buffer, n);
 			}
 		} else if (c == COMMAND_ASSERT) {
-            uint64_t* x = (vm.sp-sizeof(uint64_t));
+            uint64_t* x = (vm.sp-1);
             uint64_t* y = vm.sp;
             if (*x != *y) {
                 printf("%ld != %ld\n", *x, *y);
@@ -220,17 +220,17 @@ int ssvm_branches_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
             }
         } else if (c == COMMAND_READ_CHAR) {
 			int new_char = getchar();
-			vm.sp += sizeof(uint64_t);
+			vm.sp += 1;
 			*vm.sp = new_char;
 		} else if (c == COMMAND_READ_INTEGER) {
 			int64_t new_int;
 			scanf("%ld", &new_int);
-			vm.sp += sizeof(uint64_t);
+			vm.sp += 1;
 			*vm.sp = new_int;
 		} else if (c == COMMAND_READ_FLOATING) {
 			double new_double;
 			scanf("%lf", &new_double);
-			vm.sp += sizeof(uint64_t);
+			vm.sp += 1;
 			*vm.sp_f64 = new_double;
 		} else if (c == COMMAND_READ_BINARY_INTEGER) {
 			int64_t new_int;
