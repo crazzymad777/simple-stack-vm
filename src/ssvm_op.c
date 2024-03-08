@@ -18,14 +18,15 @@ void* op_push(void* sp, FILE* fd, int* error) {
 
 void* op_pop(void* sp, FILE* fd, int* error) {
     uint64_t** ptr = sp;
-    uint64_t* value_ptr = sp-sizeof(uint64_t);
+    uint64_t* value_ptr = sp;
+    value_ptr -= sizeof(uint64_t);
     **ptr = *value_ptr;
     return sp - sizeof(uint64_t) * 2;
 }
 
 void* op_print(void* sp, FILE* fd, int* error) {
     uint64_t* x = sp;
-    printf("%ld : %lx\n", *x, *x);
+    printf("%ld\n", *x);
     return sp;
 }
 
@@ -53,11 +54,11 @@ void* op_add(void* sp, FILE* fd, int* error) {
 }
 
 void* op_right_shift(void* sp, FILE* fd, int* error) {
-    uint64_t* x = sp-sizeof(uint64_t);
+    uint64_t* x = sp;
     uint64_t* y = sp;
+    x -= sizeof(uint64_t); // ?????????????????????
     *x = *x >> *y;
-    sp = sp-sizeof(uint64_t);
-    return sp;
+    return x;
 }
 
 void* op_to_fp_s(void* sp, FILE* fd, int* error) {
@@ -69,8 +70,10 @@ void* op_to_fp_s(void* sp, FILE* fd, int* error) {
 
 void* op_sub(void* sp, FILE* fd, int* error) {
     uint64_t* x = sp;
-    *(x-1) = *(x-1) - *x;
-    return x-1;
+    uint64_t* y = sp;
+    x -= sizeof(uint64_t); // ?????????????????????
+    *x = *x - *y;
+    return x;
 }
 
 void* op_mul(void* sp, FILE* fd, int* error) {
@@ -98,27 +101,27 @@ void* op_rem(void* sp, FILE* fd, int* error) {
 }
 
 void* op_bitwise_and(void* sp, FILE* fd, int* error) {
-    uint64_t* x = sp-sizeof(uint64_t);
+    uint64_t* x = sp;
     uint64_t* y = sp;
+    x -= sizeof(uint64_t); // ?????????????????????
     *x = *x & *y;
-    sp = sp-sizeof(uint64_t);
-    return sp;
+    return x;
 }
 
 void* op_bitwise_or(void* sp, FILE* fd, int* error) {
-    uint64_t* x = sp-sizeof(uint64_t);
+    uint64_t* x = sp;
     uint64_t* y = sp;
+    x -= sizeof(uint64_t); // ?????????????????????
     *x = *x | *y;
-    sp = sp-sizeof(uint64_t);
-    return sp;
+    return x;
 }
 
 void* op_bitwise_xor(void* sp, FILE* fd, int* error) {
-    uint64_t* x = sp-sizeof(uint64_t);
+    uint64_t* x = sp;
     uint64_t* y = sp;
+    x -= sizeof(uint64_t); // ?????????????????????
     *x = *x ^ *y;
-    sp = sp-sizeof(uint64_t);
-    return sp;
+    return x;
 }
 
 void* op_clone(void* sp, FILE* fd, int* error) {
@@ -137,43 +140,43 @@ void* op_take(void* sp, FILE* fd, int* error) {
 }
 
 void* op_fp_add(void* sp, FILE* fd, int* error) {
-    double* x = sp-sizeof(uint64_t);
+    double* x = sp;
     double* y = sp;
+    x -= sizeof(double); // ?????????????????????
     *x = *x + *y;
-    sp = sp-sizeof(uint64_t);
-    return sp;
+    return x;
 }
 
 void* op_fp_sub(void* sp, FILE* fd, int* error) {
-    double* x = sp-sizeof(uint64_t);
+    double* x = sp;
     double* y = sp;
+    x -= sizeof(double); // ?????????????????????
     *x = *x - *y;
-    sp = sp-sizeof(uint64_t);
-    return sp;
+    return x;
 }
 
 void* op_fp_mul(void* sp, FILE* fd, int* error) {
-    double* x = sp-sizeof(uint64_t);
+    double* x = sp;
     double* y = sp;
+    x -= sizeof(double); // ?????????????????????
     *x = *x * *y;
-    sp = sp-sizeof(uint64_t);
-    return sp;
+    return x;
 }
 
 void* op_fp_div(void* sp, FILE* fd, int* error) {
-    double* x = sp-sizeof(uint64_t);
+    double* x = sp;
     double* y = sp;
+    x -= sizeof(double); // ?????????????????????
     *x = *x / *y;
-    sp = sp-sizeof(uint64_t);
-    return sp;
+    return x;
 }
 
 void* op_fp_power(void* sp, FILE* fd, int* error) {
-    double* x = sp-sizeof(uint64_t);
+    double* x = sp;
     double* y = sp;
+    x -= sizeof(double); // ?????????????????????
     *x = pow(*x, *y);
-    sp = sp-sizeof(uint64_t);
-    return sp;
+    return x;
 }
 
 void* op_fp_ceil(void* sp, FILE* fd, int* error) {
@@ -237,8 +240,10 @@ void* op_left_shift(void* sp, FILE* fd, int* error) {
 }
 
 void* op_swap(void* sp, FILE* fd, int* error) {
-    uint64_t* x = sp-sizeof(uint64_t);
+    uint64_t* x = sp;
     uint64_t* y = sp;
+    x -= sizeof(uint64_t);
+
     uint64_t value = *x;
     *x = *y;
     *y = value;
@@ -253,7 +258,10 @@ void* op_to_fp(void* sp, FILE* fd, int* error) {
 }
 
 void* op_to_integer(void* sp, FILE* fd, int* error) {
-    return op_stub(sp, fd, error);
+    int64_t* result = sp;
+    double* x = sp;
+    *result = *x;
+    return sp;
 }
 
 void* op_assert(void* sp, FILE* fd, int* error) {

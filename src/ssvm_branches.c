@@ -20,14 +20,14 @@ int ssvm_branches_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 			**vm.sp_ptr = *(vm.sp-1);
 			vm.sp -= 1 * 2;
 		} else if (c == COMMAND_PRINT) {
-			printf("%ld : %lx\n", *vm.sp, *vm.sp);
+			printf("%ld\n", *vm.sp);
 		} else if (c == COMMAND_PRINT_FP) {
 			printf("%lf\n", *((double*)vm.sp));
 		} else if (c == COMMAND_SEEK_SP) {
 			int64_t piece;
 			int bytes = fread(&piece, 8, 1, fd);
 			if (bytes == 1) {
-				vm.sp += piece * 1;
+				vm.sp += piece;
 			}
 		} else if (c == COMMAND_ADD) {
 			*(vm.sp-1) = *(vm.sp-1) + *vm.sp;
