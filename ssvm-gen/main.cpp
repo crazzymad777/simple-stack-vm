@@ -115,7 +115,6 @@ int main(int argc, char* argv[]) {
                 int index = label_to_command_index[label];
                 int64_t other_offset = commands[index].offset;
                 int64_t relative = other_offset - offset;
-                std::cout << relative << std::endl;
 
                 std::streampos p = ofs.tellp();
                 ofs.seekp(16 + offset + 1);

@@ -421,7 +421,7 @@ void* op_read_char(void* sp, FILE* fd, int* error) {
 
 void* op_read_integer(void* sp, FILE* fd, int* error) {
     sp += sizeof(uint64_t);
-    scanf("%lx", sp);
+    scanf("%ld", sp);
     return sp;
 }
 
