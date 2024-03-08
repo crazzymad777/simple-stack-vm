@@ -57,6 +57,14 @@ int main(int argc, char* argv[]) {
             label_to_command_index[label] = commands.size();
             std::cin >> word;
         }
+
+        // C++20
+        if (opcodes.contains(word)) {
+            int opcode = opcodes[word];
+        } else {
+            std::cerr << "Unknown word: " + word << std::endl;
+            return -42;
+        }
     }
 
     ofs.close();
