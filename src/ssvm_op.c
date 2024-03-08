@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
+#include "ssvm_matrix.h"
 
 void* op_push(void* sp, FILE* fd, int* error) {
     uint64_t piece;
@@ -256,10 +257,6 @@ void* op_to_integer(void* sp, FILE* fd, int* error) {
     return op_stub(sp, fd, error);
 }
 
-void* op_call_c(void* sp, FILE* fd, int* error) {
-    return op_stub(sp, fd, error);
-}
-
 void* op_assert(void* sp, FILE* fd, int* error) {
     uint64_t* x = (sp-sizeof(uint64_t));
     uint64_t* y = sp;
@@ -271,6 +268,29 @@ void* op_assert(void* sp, FILE* fd, int* error) {
         printf("%ld != %ld\n", z, t);
         *error = -16;
     }
+    return sp;
+}
+
+void* op_call(void* sp, FILE* fd, int* error) {
+    long pos = ftell(fd) - 1;
+    uint64_t offset;
+
+    struct vm_state vm;
+    vm.sp = sp;
+    int bytes = fread(&offset, 8, 1, fd);
+    if (bytes == 1) {
+        if (offset == 0) {
+            *error = -6;
+            return sp;
+        }
+
+        fseek(fd, pos + offset, SEEK_SET);
+    }
+    *error = ssvm_matrix_execute(&vm, fd, sp);
+    return sp;
+}
+
+void* op_ret(void* sp, FILE* fd, int* error) {
     return sp;
 }
 

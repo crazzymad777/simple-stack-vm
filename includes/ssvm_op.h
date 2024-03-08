@@ -23,8 +23,8 @@ void* op_bitwise_xor(void* sp, FILE* fd, int* error);
 
 void* op_clone(void* sp, FILE* fd, int* error);
 void* op_omit(void* sp, FILE* fd, int* error);
-// void* op_call(void* sp, FILE* fd, int* error);
-// void* op_ret(void* sp, FILE* fd, int* error);
+void* op_call(void* sp, FILE* fd, int* error);
+void* op_ret(void* sp, FILE* fd, int* error);
 
 void* op_take(void* sp, FILE* fd, int* error);
 
@@ -56,8 +56,6 @@ void* op_to_fp(void* sp, FILE* fd, int* error);
 void* op_to_fp_s(void* sp, FILE* fd, int* error);
 void* op_to_integer(void* sp, FILE* fd, int* error);
 
-void* op_call_c(void* sp, FILE* fd, int* error);
-void* op_load_native_fn(void* sp, FILE* fd, int* error);
 void* op_assert(void* sp, FILE* fd, int* error);
 
 void* op_read_char(void* sp, FILE* fd, int* error);
@@ -96,8 +94,8 @@ ssvm_atom opcode_matrix[256] = {
     [COMMAND_BITWISE_XOR] = op_bitwise_xor,
     [COMMAND_CLONE] = op_clone,
     [COMMAND_OMIT] = op_omit,
-    [COMMAND_CALL] = op_not_implemented,
-    [COMMAND_RET] = op_not_implemented,
+    [COMMAND_CALL] = op_call,
+    [COMMAND_RET] = op_ret,
     [16] = op_unknown,
     [17] = op_unknown,
     [18] = op_unknown,
