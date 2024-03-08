@@ -32,7 +32,9 @@ int main(int argc, char* argv[]) {
     // (label:) command (N,value|value)
     std::string label;
     bool has_label;
+    bool ignore_unknown_word;
     while (!std::cin.eof()) {
+        ignore_unknown_word = false;
         label = "";
         has_label = false;
         std::cin >> word;
@@ -44,6 +46,7 @@ int main(int argc, char* argv[]) {
                 ofs.write((char*)&s, sizeof(uint64_t));
                 ofs.seekp(p);
             }
+            ignore_unknown_word = true;
         }
 
         if (word.length() > 0) {
@@ -58,10 +61,9 @@ int main(int argc, char* argv[]) {
             std::cin >> word;
         }
 
-        // C++20
-        if (opcodes.contains(word)) {
+        if (opcodes.count(word) > 0) {
             int opcode = opcodes[word];
-        } else {
+        } else if (!ignore_unknown_word) {
             std::cerr << "Unknown word: " + word << std::endl;
             return -42;
         }
