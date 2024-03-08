@@ -250,18 +250,30 @@ int ssvm_branches_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 			*vm.sp = isnan(*vm.sp_f64);
 		} else if (c == COMMAND_EOF) {
 			*vm.sp = feof(stdin);
-		} else if (c == COMMAND_CALL || c == COMMAND_COMPARE_FP) {
+		} else if (c == COMMAND_CALL) {
+			long pos = ftell(fd) - 1;
+			uint64_t offset;
+			int bytes = fread(&offset, 8, 1, fd);
+			if (bytes == 1) {
+				if (offset == 0) {
+					fprintf(stderr, "Simple Stack VM halt!\n");
+					return -6;
+				}
+				fseek(fd, pos + offset, SEEK_SET);
+			}
+
+			struct vm_state vm_callee;
+			vm_callee.sp = vm.sp;
+			int exit_code = ssvm_branches_execute(&vm_callee, fd, vm.sp);
+			fseek(fd, pos + 1, SEEK_SET);
+			*vm_ptr = vm;
+			return exit_code;
+		} else if (c == COMMAND_COMPARE_FP) {
 			*vm_ptr = vm;
 			fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
 			return -5;
 		} else if (c == COMMAND_RET) {
-			*vm_ptr = vm;
-			fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
-			return -5;
-		} else if (c >= COMMAND_JUMP_IF_ZERO && c <= COMMAND_JUMP_IF_LESS_OR_EQUAL) {
-			*vm_ptr = vm;
-			fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
-			return -5;
+			return 0;
 		} else {
 			*vm_ptr = vm;
 			fprintf(stderr, "Error! Unknown opcode: 0x%x\n", c);

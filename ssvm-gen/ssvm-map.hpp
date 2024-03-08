@@ -71,7 +71,7 @@ std::map<int, int> opcodes_types = {
     {COMMAND_BITWISE_XOR, 0},
     {COMMAND_CLONE, 0},
     {COMMAND_OMIT, 0},
-    {COMMAND_CALL, 0},
+    {COMMAND_CALL, 3},
     {COMMAND_RET, 0},
     {COMMAND_TAKE, 0},
     {COMMAND_FP_ADD, 0},
