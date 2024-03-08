@@ -6,14 +6,14 @@
 #include "ssvm_matrix.h"
 
 void* op_push(void* sp, FILE* fd, int* error) {
+    uint64_t* usp = sp;
     uint64_t piece;
     int bytes = fread(&piece, 8, 1, fd);
     if (bytes == 1) {
-        sp += sizeof(uint64_t);
-        uint64_t* value = sp;
-        *value = piece;
+        usp += 1;
+        *usp = piece;
     }
-    return sp + sizeof(uint64_t);
+    return usp;
 }
 
 void* op_pop(void* sp, FILE* fd, int* error) {
@@ -45,11 +45,11 @@ void* op_seek_sp(void* sp, FILE* fd, int* error) {
 }
 
 void* op_add(void* sp, FILE* fd, int* error) {
-    uint64_t* x = sp-1;
+    uint64_t* x = sp;
     uint64_t* y = sp;
+    x -= sizeof(uint64_t); // ?????????????????????
     *x = *x + *y;
-    sp = sp-1;
-    return sp;
+    return x;
 }
 
 void* op_right_shift(void* sp, FILE* fd, int* error) {
@@ -68,10 +68,9 @@ void* op_to_fp_s(void* sp, FILE* fd, int* error) {
 }
 
 void* op_sub(void* sp, FILE* fd, int* error) {
-    uint64_t* usp = sp;
-    *(usp-sizeof(uint64_t)) = *(usp-sizeof(uint64_t)) - *usp;
-	usp = usp-sizeof(uint64_t);
-    return usp;
+    uint64_t* x = sp;
+    *(x-1) = *(x-1) - *x;
+    return x-1;
 }
 
 void* op_mul(void* sp, FILE* fd, int* error) {
