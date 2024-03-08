@@ -202,25 +202,6 @@ int ssvm_branches_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 					fseek(fd, pos + offset, SEEK_SET);
 				}
 			}
-		} else if (c == COMMAND_CALL_C) {
-			// USE libffi
-			*vm_ptr = vm;
-			fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
-			return -5;
-		} else if (c == COMMAND_LOAD_NATIVE_FN) {
-			if (*vm.sp == 0) {
-				*vm.sp_fn_ptr = dlopen;
-			} else if (*vm.sp == 1) {
-				*vm.sp_fn_ptr = dlerror;
-			} else if (*vm.sp == 2) {
-				*vm.sp_fn_ptr = dlsym;
-			} else if (*vm.sp == 3) {
-				*vm.sp_fn_ptr = dlclose;
-			} else if (*vm.sp == 4) {
-				*vm.sp_fn_ptr = puts;
-			} else {
-				*vm.sp = 0;
-			}
 		} else if (c == COMMAND_LOAD) {
 			uint64_t n = 0;
 			int bytes = fread(&n, 8, 1, fd);

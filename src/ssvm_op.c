@@ -1,7 +1,6 @@
 #define SSVM_FILL_OPCODE_MATRIX
 #include "ssvm_op.h"
 #include <stdio.h>
-#include <dlfcn.h>
 #include <math.h>
 #include <string.h>
 
@@ -64,25 +63,6 @@ void* op_to_fp_s(void* sp, FILE* fd, int* error) {
     int64_t* x = sp;
     double* result = sp;
     *result = *x;
-    return sp;
-}
-
-void* op_load_native_fn(void* sp, FILE* fd, int* error) {
-    uint64_t* x = sp;
-    void **fn = sp;
-    if (*x == 0) {
-        *fn = dlopen;
-    } else if (*x == 1) {
-        *fn = dlerror;
-    } else if (*x == 2) {
-        *fn = dlsym;
-    } else if (*x == 3) {
-        *fn = dlclose;
-    } else if (*x == 4) {
-        *fn = puts;
-    } else {
-        *fn = NULL;
-    }
     return sp;
 }
 

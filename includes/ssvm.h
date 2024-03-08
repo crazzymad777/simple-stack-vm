@@ -66,14 +66,8 @@
 #define COMMAND_TO_FP_S 0x2e // signed
 #define COMMAND_TO_INTEGER 0x2f // convert floating point to integer
 
-#define COMMAND_CALL_C 0x30 // *sp - function pointer, *(sp-1) arguments pointer, *(sp-2) size of arguments
-// #define COMMAND_CALL_STD_SSVM 49 // index
-#define COMMAND_LOAD_NATIVE_FN 0x31 // index, return pointer to function on stack
-// 0 - dlopen - char* filename, int flag -> void
-// 1 - dlerror - -> char*
-// 2 - dlsym - void* handle, char* symbol
-// 3 - dlclose - void* handle -> int
-// 4 - puts
+#define COMMAND_CALL_C 0x30
+#define COMMAND_LOAD_NATIVE_FN 0x31
 
 #define COMMAND_ASSERT 0x32
 
