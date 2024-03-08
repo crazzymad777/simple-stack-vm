@@ -2,6 +2,7 @@
 #include <fstream>
 #include "../includes/ssvm.h"
 #include "ssvm-map.hpp"
+#include "command.hpp"
 
 int main(int argc, char* argv[]) {
     std::ofstream ofs;
