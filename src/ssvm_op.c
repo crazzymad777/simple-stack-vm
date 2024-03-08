@@ -13,7 +13,7 @@ void* op_push(void* sp, FILE* fd, int* error) {
         uint64_t* value = sp;
         *value = piece;
     }
-    return sp;
+    return sp + sizeof(uint64_t);
 }
 
 void* op_pop(void* sp, FILE* fd, int* error) {
@@ -68,15 +68,17 @@ void* op_to_fp_s(void* sp, FILE* fd, int* error) {
 }
 
 void* op_sub(void* sp, FILE* fd, int* error) {
-    uint64_t* y = (uint64_t*)sp;
-    *(y-sizeof(uint64_t)) = *(y-sizeof(uint64_t)) - *y;
-    return sp-sizeof(uint64_t);
+    uint64_t* usp = sp;
+    *(usp-sizeof(uint64_t)) = *(usp-sizeof(uint64_t)) - *usp;
+	usp = usp-sizeof(uint64_t);
+    return usp;
 }
 
 void* op_mul(void* sp, FILE* fd, int* error) {
-    uint64_t* y = sp;
-    *(y-sizeof(uint64_t)) = *(y-sizeof(uint64_t)) * (*y);
-    return sp-sizeof(uint64_t);
+    uint64_t* usp = sp;
+    *(usp-sizeof(uint64_t)) = *(usp-sizeof(uint64_t)) * *usp;
+	usp = usp-sizeof(uint64_t);
+    return usp;
 }
 
 void* op_div(void* sp, FILE* fd, int* error) {
@@ -123,7 +125,7 @@ void* op_clone(void* sp, FILE* fd, int* error) {
     uint64_t* value = sp;
     value += sizeof(uint64_t);
     *value = *(value-sizeof(uint64_t));
-    return sp+sizeof(uint64_t);
+    return value;
 }
 
 void* op_take(void* sp, FILE* fd, int* error) {
@@ -423,9 +425,10 @@ void* op_read_char(void* sp, FILE* fd, int* error) {
 }
 
 void* op_read_integer(void* sp, FILE* fd, int* error) {
-    sp += sizeof(uint64_t);
-    scanf("%ld", sp);
-    return sp;
+    uint64_t* usp = sp;
+    usp += sizeof(uint64_t);
+    scanf("%ld", usp);
+    return usp;
 }
 
 void* op_read_floating(void* sp, FILE* fd, int* error) {
