@@ -6,12 +6,16 @@ int ssvm_matrix_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 
 	int c = fgetc(fd);
 	if (c != EOF) {
-		// printf("%x : %x\n", ftell(fd), c);
 		int error_code = 0;
-		vm.sp = opcode_matrix[c](vm.sp, fd, &error_code);
-		if (error_code == -42) {
-			// *vm_ptr = vm;
-			return 0;
+		ssvm_atom fn = opcode_matrix[c];
+		int64_t* old_sp = vm.sp;
+		vm.sp = fn(vm.sp, fd, &error_code);
+		int64_t* new_sp = vm.sp;
+		if (c == COMMAND_CALL) {
+			printf("CALL %x %x (%ld) %x (%ld)\n",c,old_sp,*old_sp,new_sp,*new_sp);
+		}
+		if (c == COMMAND_CLONE || c == COMMAND_SUB || c == COMMAND_MUL) {
+			printf("%x %x (%ld) %x (%ld)\n",c,old_sp,*old_sp,new_sp,*new_sp);
 		}
 
 		if (error_code != 0) {
@@ -34,6 +38,7 @@ int ssvm_matrix_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 }
 
 int ssvm_matrix_call(struct vm_state vm, FILE* fd, void* stack) {
+	//printf("ssvm_matrix_call(%x,%x,%x) - %d\n", &vm, fd, stack, ftell(fd));
 	while (!feof(fd)) {
 		int r = ssvm_matrix_execute(&vm, fd, stack);
 		if (r == -42) {

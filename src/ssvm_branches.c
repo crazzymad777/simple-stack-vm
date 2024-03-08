@@ -9,8 +9,6 @@ int ssvm_branches_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 
 	int c = fgetc(fd);
 	if (c != EOF) {
-		// printf("%x : %x\n", ftell(fd), c);
-
 		if (c == COMMAND_PUSH) {
 			uint64_t piece;
 			int bytes = fread(&piece, 8, 1, fd);
@@ -22,7 +20,7 @@ int ssvm_branches_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 			**vm.sp_ptr = *(vm.sp-sizeof(uint64_t));
 			vm.sp -= sizeof(uint64_t) * 2;
 		} else if (c == COMMAND_PRINT) {
-			printf("%lx\n", *vm.sp);
+			printf("%ld : %lx\n", *vm.sp, *vm.sp);
 		} else if (c == COMMAND_PRINT_FP) {
 			printf("%lf\n", *((double*)vm.sp));
 		} else if (c == COMMAND_SEEK_SP) {
@@ -291,6 +289,7 @@ int ssvm_branches_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 }
 
 int ssvm_branches_call(struct vm_state vm, FILE* fd, void* stack) {
+	printf("ssvm_branches_call(%x,%x,%x)\n", &vm, fd, stack);
 	while (!feof(fd)) {
 		int r = ssvm_branches_execute(&vm, fd, stack);
 		if (r == -42) {

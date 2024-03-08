@@ -25,7 +25,7 @@ void* op_pop(void* sp, FILE* fd, int* error) {
 
 void* op_print(void* sp, FILE* fd, int* error) {
     uint64_t* x = sp;
-    printf("%lx\n", *x);
+    printf("%ld : %lx\n", *x, *x);
     return sp;
 }
 
@@ -68,19 +68,15 @@ void* op_to_fp_s(void* sp, FILE* fd, int* error) {
 }
 
 void* op_sub(void* sp, FILE* fd, int* error) {
-    uint64_t* x = sp-sizeof(uint64_t);
-    uint64_t* y = sp;
-    *x = *x - *y;
-    sp = sp-sizeof(uint64_t);
-    return sp;
+    uint64_t* y = (uint64_t*)sp;
+    *(y-sizeof(uint64_t)) = *(y-sizeof(uint64_t)) - *y;
+    return sp-sizeof(uint64_t);
 }
 
 void* op_mul(void* sp, FILE* fd, int* error) {
-    uint64_t* x = sp-sizeof(uint64_t);
     uint64_t* y = sp;
-    *x = *x * *y;
-    sp = sp-sizeof(uint64_t);
-    return sp;
+    *(y-sizeof(uint64_t)) = *(y-sizeof(uint64_t)) * (*y);
+    return sp-sizeof(uint64_t);
 }
 
 void* op_div(void* sp, FILE* fd, int* error) {
@@ -124,10 +120,10 @@ void* op_bitwise_xor(void* sp, FILE* fd, int* error) {
 }
 
 void* op_clone(void* sp, FILE* fd, int* error) {
-    sp += sizeof(uint64_t);
     uint64_t* value = sp;
-    *value = *(value - sizeof(uint64_t));
-    return sp;
+    value += sizeof(uint64_t);
+    *value = *(value-sizeof(uint64_t));
+    return sp+sizeof(uint64_t);
 }
 
 void* op_take(void* sp, FILE* fd, int* error) {
@@ -276,6 +272,7 @@ void* op_call(void* sp, FILE* fd, int* error) {
     uint64_t offset;
 
     struct vm_state vm;
+    vm.operand_size = sizeof(uint64_t);
     vm.sp = sp;
     int bytes = fread(&offset, 8, 1, fd);
     if (bytes == 1) {
@@ -285,9 +282,13 @@ void* op_call(void* sp, FILE* fd, int* error) {
         }
 
         fseek(fd, pos + offset, SEEK_SET);
+
+        *error = ssvm_matrix_call(vm, fd, sp);
+        if (*error == -42) {
+            *error = 0;
+        }
+        fseek(fd, pos + 9, SEEK_SET);
     }
-    *error = ssvm_matrix_call(vm, fd, sp);
-    fseek(fd, pos + 9, SEEK_SET);
     return sp;
 }
 
