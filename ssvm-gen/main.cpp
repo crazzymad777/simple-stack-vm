@@ -3,6 +3,7 @@
 #include "../includes/ssvm.h"
 #include "ssvm-map.hpp"
 #include "command.hpp"
+#include <list>
 
 int main(int argc, char* argv[]) {
     std::ofstream ofs;
@@ -23,10 +24,17 @@ int main(int argc, char* argv[]) {
     ofs << protect_field;
     ofs.write((char*)&stack_size, sizeof(stack_size));
 
+
+    std::list<ssvm_command> commands;
+    std::map<std::string, int> label_to_command_index;
     std::string word;
     // COMMAND:
     // (label:) command (N,value|value)
+    std::string label;
+    bool has_label;
     while (!std::cin.eof()) {
+        label = "";
+        has_label = false;
         std::cin >> word;
         if (word == ".stack") {
             uint64_t s;
@@ -36,6 +44,18 @@ int main(int argc, char* argv[]) {
                 ofs.write((char*)&s, sizeof(uint64_t));
                 ofs.seekp(p);
             }
+        }
+
+        if (word.length() > 0) {
+            if (word[word.length()-1] == ':') {
+                has_label = true;
+                label = word.substr(0, word.length()-1);
+            }
+        }
+
+        if (has_label) {
+            label_to_command_index[label] = commands.size();
+            std::cin >> word;
         }
     }
 
