@@ -272,9 +272,22 @@ int ssvm_branches_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 			*vm_ptr = vm;
 			return exit_code;
 		} else if (c == COMMAND_COMPARE_FP) {
-			*vm_ptr = vm;
-			fprintf(stderr, "Error! Not implemented opcode: 0x%x\n", c);
-			return -5;
+			uint64_t value = 0;
+			// char equal = *(vm.sp_f64-1) == *vm.sp_f64;
+			char greater = *(vm.sp_f64-1) > *vm.sp_f64;
+			char less = *(vm.sp_f64-1) < *vm.sp_f64;
+			char not_equal = *(vm.sp_f64-1) != *vm.sp_f64;
+
+			value = not_equal | (greater << 1) | (less << 2);
+			// Equal - 0
+			// Not Equal - 1
+			// Greater - 3
+			// Less - 5
+
+			// NaN != NaN -> 1
+			// NaN != x -> 1
+			vm.sp_f64 += 1;
+			*vm.sp = value;
 		} else if (c == COMMAND_RET) {
 			// *vm_ptr = vm;
 			return -42;
