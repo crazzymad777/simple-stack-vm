@@ -4,6 +4,12 @@
 #include "ssvm.h"
 #include <stdio.h>
 
+union ssvm_matrix_friend {
+    uint64_t* sp;
+    double* sp_f64;
+    void* ptr;
+};
+
 typedef void* (*ssvm_atom)(void* sp, FILE* fd, int* error);
 
 void* op_push(void* sp, FILE* fd, int* error);
