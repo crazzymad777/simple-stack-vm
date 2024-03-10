@@ -65,7 +65,13 @@ int main(int argc, char* argv[]) {
             std::cin >> word;
         }
 
-        if (opcodes.count(word) > 0) {
+        if (opcodes.count(word) > 0 || word == "pushf") {
+            bool pushf = false;
+            if (word == "pushf") {
+                pushf = true;
+                word = "push";
+            }
+
             int opcode = opcodes[word];
             int optype = opcodes_types[opcode];
 
@@ -74,7 +80,14 @@ int main(int argc, char* argv[]) {
                 command = ssvm_command(opcode, offset);
             } if (optype == 1) { // const
                 int64_t const_value;
-                std::cin >> const_value;
+                if (pushf) {
+                    double* f64 = (double*)&const_value;
+                    double r;
+                    std::cin >> r;
+                    *f64 = r;
+                } else {
+                    std::cin >> const_value;
+                }
                 command = ssvm_command(opcode, const_value, offset);
             } else if (optype == 2) { // vector
                 std::cerr << "Not implemented: " + word << std::endl;

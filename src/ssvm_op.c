@@ -142,16 +142,16 @@ void* op_take(void* sp, FILE* fd, int* error) {
 void* op_fp_add(void* sp, FILE* fd, int* error) {
     double* x = sp;
     double* y = sp;
-    x -= sizeof(double); // ?????????????????????
-    *x = *x + *y;
+    x -= 1; // ?????????????????????
+    (*x) = (*x) + (*y);
     return x;
 }
 
 void* op_fp_sub(void* sp, FILE* fd, int* error) {
     double* x = sp;
     double* y = sp;
-    x -= sizeof(double); // ?????????????????????
-    *x = *x - *y;
+    x -= 1; // ?????????????????????
+    (*x) = (*x) - (*y);
     return x;
 }
 
@@ -159,22 +159,22 @@ void* op_fp_mul(void* sp, FILE* fd, int* error) {
     double* x = sp;
     double* y = sp;
     x -= sizeof(double); // ?????????????????????
-    *x = *x * *y;
+    (*x) = (*x) * (*y);
     return x;
 }
 
 void* op_fp_div(void* sp, FILE* fd, int* error) {
     double* x = sp;
     double* y = sp;
-    x -= sizeof(double); // ?????????????????????
-    *x = *x / *y;
+    x -= 1; // ?????????????????????
+    (*x) = (*x) / (*y);
     return x;
 }
 
 void* op_fp_power(void* sp, FILE* fd, int* error) {
     double* x = sp;
     double* y = sp;
-    x -= sizeof(double); // ?????????????????????
+    x -= 1; // ?????????????????????
     *x = pow(*x, *y);
     return x;
 }
@@ -232,11 +232,11 @@ void* op_print_all(void* sp, FILE* fd, int* error) {
 }
 
 void* op_left_shift(void* sp, FILE* fd, int* error) {
-    uint64_t* x = sp-sizeof(uint64_t);
+   uint64_t* x = sp;
     uint64_t* y = sp;
+    x -= sizeof(uint64_t); // ?????????????????????
     *x = *x << *y;
-    sp = sp-sizeof(uint64_t);
-    return sp;
+    return x;
 }
 
 void* op_swap(void* sp, FILE* fd, int* error) {
@@ -424,8 +424,6 @@ void* op_jump_le(void* sp, FILE* fd, int* error) {
     return sp;
 }
 
-// fp comparison  ?
-
 void* op_read_char(void* sp, FILE* fd, int* error) {
     sp += sizeof(uint64_t);
     int64_t* char_ptr = sp;
@@ -471,20 +469,25 @@ void* op_print_char(void* sp, FILE* fd, int* error) {
 }
 
 void* op_compare_fp(void* sp, FILE* fd, int* error) {
-    return op_stub(sp, fd, error);
-    /*double* left_double = sp-sizeof(uint64_t);
-    double* right_double = sp;
-    int64_t* result = sp;
-    if (*left_double > *right_double) {
-        *result = 1;
-    } else if (*left_double < *right_double) {
-        *result = -1;
-    } else if (*left_double == *right_double) {
-        *result = 0;
-    } else if (*left_double != *right_double) {
-        *result = 0;
-    }
-    return sp;*/
+    double* usp = sp;
+    uint64_t value = 0;
+    // char equal = *(vm.sp_f64-1) == *vm.sp_f64;
+    char greater = *(usp-1) > *usp;
+    char less = *(usp-1) < *usp;
+    char not_equal = *(usp-1) != *usp;
+
+    value = not_equal | (greater << 1) | (less << 2);
+    // Equal - 0
+    // Not Equal - 1
+    // Greater - 3
+    // Less - 5
+
+    // NaN != NaN -> 1
+    // NaN != x -> 1
+    usp += 1;
+    uint64_t* ret = (uint64_t*)usp;
+    *ret = value;
+    return usp;
 }
 
 void* op_eof(void* sp, FILE* fd, int* error) {
