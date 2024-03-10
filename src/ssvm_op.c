@@ -46,7 +46,7 @@ void* op_seek_sp(union ssvm_matrix_friend arg, FILE* fd, int* error) {
 void* op_add(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     uint64_t* x = arg.sp;
     uint64_t* y = arg.sp;
-    x -= 1; // ?????????????????????
+    x -= 1;
     *x = *x + *y;
     return x;
 }
@@ -54,7 +54,7 @@ void* op_add(union ssvm_matrix_friend arg, FILE* fd, int* error) {
 void* op_right_shift(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     uint64_t* x = arg.sp;
     uint64_t* y = arg.sp;
-    x -= 1; // ?????????????????????
+    x -= 1;
     *x = *x >> *y;
     return x;
 }
@@ -69,7 +69,7 @@ void* op_to_fp_s(union ssvm_matrix_friend arg, FILE* fd, int* error) {
 void* op_sub(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     uint64_t* x = arg.sp;
     uint64_t* y = arg.sp;
-    x -= 1; // ?????????????????????
+    x -= 1;
     *x = *x - *y;
     return x;
 }
@@ -77,7 +77,7 @@ void* op_sub(union ssvm_matrix_friend arg, FILE* fd, int* error) {
 void* op_mul(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     uint64_t* x = arg.sp;
     uint64_t* y = arg.sp;
-    x -= 1; // ?????????????????????
+    x -= 1;
     *x = *x * *y;
     return x;
 }
@@ -85,7 +85,7 @@ void* op_mul(union ssvm_matrix_friend arg, FILE* fd, int* error) {
 void* op_div(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     uint64_t* x = arg.sp;
     uint64_t* y = arg.sp;
-    x -= 1; // ?????????????????????
+    x -= 1;
     *x = *x / *y;
     return x;
 }
@@ -93,7 +93,7 @@ void* op_div(union ssvm_matrix_friend arg, FILE* fd, int* error) {
 void* op_rem(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     uint64_t* x = arg.sp;
     uint64_t* y = arg.sp;
-    x -= 1; // ?????????????????????
+    x -= 1;
     *x = *x % *y;
     return x;
 }
@@ -101,7 +101,7 @@ void* op_rem(union ssvm_matrix_friend arg, FILE* fd, int* error) {
 void* op_bitwise_and(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     uint64_t* x = arg.sp;
     uint64_t* y = arg.sp;
-    x -= 1; // ?????????????????????
+    x -= 1;
     *x = *x & *y;
     return x;
 }
@@ -109,7 +109,7 @@ void* op_bitwise_and(union ssvm_matrix_friend arg, FILE* fd, int* error) {
 void* op_bitwise_or(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     uint64_t* x = arg.sp;
     uint64_t* y = arg.sp;
-    x -= 1; // ?????????????????????
+    x -= 1;
     *x = *x | *y;
     return x;
 }
@@ -117,7 +117,7 @@ void* op_bitwise_or(union ssvm_matrix_friend arg, FILE* fd, int* error) {
 void* op_bitwise_xor(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     uint64_t* x = arg.sp;
     uint64_t* y = arg.sp;
-    x -= 1; // ?????????????????????
+    x -= 1;
     *x = *x ^ *y;
     return x;
 }
@@ -125,7 +125,7 @@ void* op_bitwise_xor(union ssvm_matrix_friend arg, FILE* fd, int* error) {
 void* op_clone(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     uint64_t* x = arg.sp;
     uint64_t* y = arg.sp;
-    x += 1; // ?????????????????????
+    x += 1;
     *x = *y;
     return x;
 }
@@ -140,7 +140,7 @@ void* op_take(union ssvm_matrix_friend arg, FILE* fd, int* error) {
 void* op_fp_add(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     double* x = arg.sp_f64;
     double* y = arg.sp_f64;
-    x -= 1; // ?????????????????????
+    x -= 1;
     (*x) = (*x) + (*y);
     return x;
 }
@@ -148,7 +148,7 @@ void* op_fp_add(union ssvm_matrix_friend arg, FILE* fd, int* error) {
 void* op_fp_sub(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     double* x = arg.sp_f64;
     double* y = arg.sp_f64;
-    x -= 1; // ?????????????????????
+    x -= 1;
     (*x) = (*x) - (*y);
     return x;
 }
@@ -231,7 +231,7 @@ void* op_print_all(union ssvm_matrix_friend arg, FILE* fd, int* error) {
 void* op_left_shift(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     uint64_t* x = arg.sp;
     uint64_t* y = arg.sp;
-    x -= 1; // ?????????????????????
+    x -= 1;
     *x = *x << *y;
     return x;
 }
