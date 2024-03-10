@@ -8,7 +8,7 @@ int ssvm_matrix_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 	if (c != EOF) {
 		int error_code = 0;
 		ssvm_atom fn = opcode_matrix[c];
-		vm.sp = fn(vm.sp, fd, &error_code);
+		vm.sp = fn((union ssvm_matrix_friend)vm.sp, fd, &error_code);
 		if (error_code != 0) {
 			if (error_code == -4) {
 				fprintf(stderr, "Error! Unknown opcode: 0x%x\n", c);

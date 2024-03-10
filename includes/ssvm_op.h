@@ -10,76 +10,76 @@ union ssvm_matrix_friend {
     void* ptr;
 };
 
-typedef void* (*ssvm_atom)(void* sp, FILE* fd, int* error);
+typedef void* (*ssvm_atom)(union ssvm_matrix_friend arg, FILE* fd, int* error);
 
-void* op_push(void* sp, FILE* fd, int* error);
-void* op_pop(void* sp, FILE* fd, int* error);
-void* op_print(void* sp, FILE* fd, int* error);
-void* op_seek_sp(void* sp, FILE* fd, int* error);
+void* op_push(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_pop(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_print(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_seek_sp(union ssvm_matrix_friend arg, FILE* fd, int* error);
 
-void* op_add(void* sp, FILE* fd, int* error);
-void* op_sub(void* sp, FILE* fd, int* error);
-void* op_mul(void* sp, FILE* fd, int* error);
-void* op_div(void* sp, FILE* fd, int* error);
-void* op_rem(void* sp, FILE* fd, int* error);
+void* op_add(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_sub(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_mul(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_div(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_rem(union ssvm_matrix_friend arg, FILE* fd, int* error);
 
-void* op_bitwise_and(void* sp, FILE* fd, int* error);
-void* op_bitwise_or(void* sp, FILE* fd, int* error);
-void* op_bitwise_xor(void* sp, FILE* fd, int* error);
+void* op_bitwise_and(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_bitwise_or(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_bitwise_xor(union ssvm_matrix_friend arg, FILE* fd, int* error);
 
-void* op_clone(void* sp, FILE* fd, int* error);
-void* op_omit(void* sp, FILE* fd, int* error);
-void* op_call(void* sp, FILE* fd, int* error);
-void* op_ret(void* sp, FILE* fd, int* error);
+void* op_clone(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_omit(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_call(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_ret(union ssvm_matrix_friend arg, FILE* fd, int* error);
 
-void* op_take(void* sp, FILE* fd, int* error);
+void* op_take(union ssvm_matrix_friend arg, FILE* fd, int* error);
 
-void* op_fp_add(void* sp, FILE* fd, int* error);
-void* op_fp_sub(void* sp, FILE* fd, int* error);
-void* op_fp_mul(void* sp, FILE* fd, int* error);
-void* op_fp_div(void* sp, FILE* fd, int* error);
-void* op_fp_power(void* sp, FILE* fd, int* error);
-void* op_fp_ceil(void* sp, FILE* fd, int* error);
-void* op_fp_round(void* sp, FILE* fd, int* error);
-void* op_malloc(void* sp, FILE* fd, int* error);
-void* op_load(void* sp, FILE* fd, int* error);
-void* op_free(void* sp, FILE* fd, int* error);
-void* op_print_all(void* sp, FILE* fd, int* error);
-void* op_print_fp(void* sp, FILE* fd, int* error);
+void* op_fp_add(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_fp_sub(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_fp_mul(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_fp_div(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_fp_power(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_fp_ceil(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_fp_round(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_malloc(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_load(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_free(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_print_all(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_print_fp(union ssvm_matrix_friend arg, FILE* fd, int* error);
 
-void* op_jump(void* sp, FILE* fd, int* error);
-void* op_jump_e(void* sp, FILE* fd, int* error);
-void* op_jump_ne(void* sp, FILE* fd, int* error);
-void* op_jump_g(void* sp, FILE* fd, int* error);
-void* op_jump_ge(void* sp, FILE* fd, int* error);
-void* op_jump_l(void* sp, FILE* fd, int* error);
-void* op_jump_le(void* sp, FILE* fd, int* error);
+void* op_jump(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_jump_e(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_jump_ne(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_jump_g(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_jump_ge(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_jump_l(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_jump_le(union ssvm_matrix_friend arg, FILE* fd, int* error);
 
-void* op_right_shift(void* sp, FILE* fd, int* error);
-void* op_swap(void* sp, FILE* fd, int* error);
-void* op_left_shift(void* sp, FILE* fd, int* error);
-void* op_to_fp(void* sp, FILE* fd, int* error);
-void* op_to_fp_s(void* sp, FILE* fd, int* error);
-void* op_to_integer(void* sp, FILE* fd, int* error);
+void* op_right_shift(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_swap(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_left_shift(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_to_fp(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_to_fp_s(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_to_integer(union ssvm_matrix_friend arg, FILE* fd, int* error);
 
-void* op_assert(void* sp, FILE* fd, int* error);
+void* op_assert(union ssvm_matrix_friend arg, FILE* fd, int* error);
 
-void* op_read_char(void* sp, FILE* fd, int* error);
-void* op_read_integer(void* sp, FILE* fd, int* error);
-void* op_read_floating(void* sp, FILE* fd, int* error);
-void* op_read_binary_integer(void* sp, FILE* fd, int* error);
-void* op_read_binary_floating(void* sp, FILE* fd, int* error);
+void* op_read_char(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_read_integer(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_read_floating(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_read_binary_integer(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_read_binary_floating(union ssvm_matrix_friend arg, FILE* fd, int* error);
 
-void* op_print_string(void* sp, FILE* fd, int* error);
-void* op_print_char(void* sp, FILE* fd, int* error);
+void* op_print_string(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_print_char(union ssvm_matrix_friend arg, FILE* fd, int* error);
 
-void* op_compare_fp(void* sp, FILE* fd, int* error);
-void* op_eof(void* sp, FILE* fd, int* error);
-void* op_is_nan(void* sp, FILE* fd, int* error);
+void* op_compare_fp(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_eof(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_is_nan(union ssvm_matrix_friend arg, FILE* fd, int* error);
 
-void* op_stub(void* sp, FILE* fd, int* error);
-void* op_not_implemented(void* sp, FILE* fd, int* error);
-void* op_unknown(void* sp, FILE* fd, int* error);
+void* op_stub(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_not_implemented(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_unknown(union ssvm_matrix_friend arg, FILE* fd, int* error);
 
 extern ssvm_atom opcode_matrix[256];
 

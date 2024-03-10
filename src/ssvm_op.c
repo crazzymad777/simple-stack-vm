@@ -5,200 +5,197 @@
 #include <string.h>
 #include "ssvm_matrix.h"
 
-void* op_push(void* sp, FILE* fd, int* error) {
-    uint64_t* usp = sp;
+void* op_push(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     uint64_t piece;
     int bytes = fread(&piece, 8, 1, fd);
     if (bytes == 1) {
-        usp += 1;
-        *usp = piece;
+        arg.sp += 1;
+        *arg.sp = piece;
     }
-    return usp;
+    return arg.sp;
 }
 
-void* op_pop(void* sp, FILE* fd, int* error) {
-    uint64_t** ptr = sp;
-    uint64_t* value_ptr = sp;
+
+void* op_pop(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    uint64_t** ptr = arg.ptr;
+    uint64_t* value_ptr = arg.sp;
     value_ptr -= sizeof(uint64_t);
     **ptr = *value_ptr;
-    return sp - sizeof(uint64_t) * 2;
+    return arg.ptr - sizeof(uint64_t) * 2;
 }
 
-void* op_print(void* sp, FILE* fd, int* error) {
-    uint64_t* x = sp;
-    printf("%ld\n", *x);
-    return sp;
+void* op_print(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    printf("%ld\n", *arg.sp);
+    return arg.ptr;
 }
 
-void* op_print_fp(void* sp, FILE* fd, int* error) {
-    double* x = sp;
-    printf("%lf\n", *x);
-    return sp;
+void* op_print_fp(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    printf("%lf\n", *arg.sp_f64);
+    return arg.ptr;
 }
 
-void* op_seek_sp(void* sp, FILE* fd, int* error) {
+void* op_seek_sp(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     int64_t piece;
     int bytes = fread(&piece, 8, 1, fd);
     if (bytes == 1) {
-        sp += piece * sizeof(uint64_t);
+        arg.sp += piece;
     }
-    return sp;
+    return arg.ptr;
 }
 
-void* op_add(void* sp, FILE* fd, int* error) {
-    uint64_t* x = sp;
-    uint64_t* y = sp;
-    x -= sizeof(uint64_t); // ?????????????????????
+void* op_add(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    uint64_t* x = arg.sp;
+    uint64_t* y = arg.sp;
+    x -= 1; // ?????????????????????
     *x = *x + *y;
     return x;
 }
 
-void* op_right_shift(void* sp, FILE* fd, int* error) {
-    uint64_t* x = sp;
-    uint64_t* y = sp;
-    x -= sizeof(uint64_t); // ?????????????????????
+void* op_right_shift(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    uint64_t* x = arg.sp;
+    uint64_t* y = arg.sp;
+    x -= 1; // ?????????????????????
     *x = *x >> *y;
     return x;
 }
 
-void* op_to_fp_s(void* sp, FILE* fd, int* error) {
-    int64_t* x = sp;
-    double* result = sp;
+void* op_to_fp_s(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    int64_t* x = arg.sp;
+    double* result = arg.sp_f64;
     *result = *x;
-    return sp;
+    return arg.ptr;
 }
 
-void* op_sub(void* sp, FILE* fd, int* error) {
-    uint64_t* x = sp;
-    uint64_t* y = sp;
-    x -= sizeof(uint64_t); // ?????????????????????
+void* op_sub(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    uint64_t* x = arg.sp;
+    uint64_t* y = arg.sp;
+    x -= 1; // ?????????????????????
     *x = *x - *y;
     return x;
 }
 
-void* op_mul(void* sp, FILE* fd, int* error) {
-    uint64_t* x = sp;
-    uint64_t* y = sp;
-    x -= sizeof(uint64_t); // ?????????????????????
+void* op_mul(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    uint64_t* x = arg.sp;
+    uint64_t* y = arg.sp;
+    x -= 1; // ?????????????????????
     *x = *x * *y;
     return x;
 }
 
-void* op_div(void* sp, FILE* fd, int* error) {
-    uint64_t* x = sp;
-    uint64_t* y = sp;
-    x -= sizeof(uint64_t); // ?????????????????????
+void* op_div(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    uint64_t* x = arg.sp;
+    uint64_t* y = arg.sp;
+    x -= 1; // ?????????????????????
     *x = *x / *y;
     return x;
 }
 
-void* op_rem(void* sp, FILE* fd, int* error) {
-    uint64_t* x = sp;
-    uint64_t* y = sp;
-    x -= sizeof(uint64_t); // ?????????????????????
+void* op_rem(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    uint64_t* x = arg.sp;
+    uint64_t* y = arg.sp;
+    x -= 1; // ?????????????????????
     *x = *x % *y;
     return x;
 }
 
-void* op_bitwise_and(void* sp, FILE* fd, int* error) {
-    uint64_t* x = sp;
-    uint64_t* y = sp;
-    x -= sizeof(uint64_t); // ?????????????????????
+void* op_bitwise_and(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    uint64_t* x = arg.sp;
+    uint64_t* y = arg.sp;
+    x -= 1; // ?????????????????????
     *x = *x & *y;
     return x;
 }
 
-void* op_bitwise_or(void* sp, FILE* fd, int* error) {
-    uint64_t* x = sp;
-    uint64_t* y = sp;
-    x -= sizeof(uint64_t); // ?????????????????????
+void* op_bitwise_or(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    uint64_t* x = arg.sp;
+    uint64_t* y = arg.sp;
+    x -= 1; // ?????????????????????
     *x = *x | *y;
     return x;
 }
 
-void* op_bitwise_xor(void* sp, FILE* fd, int* error) {
-    uint64_t* x = sp;
-    uint64_t* y = sp;
-    x -= sizeof(uint64_t); // ?????????????????????
+void* op_bitwise_xor(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    uint64_t* x = arg.sp;
+    uint64_t* y = arg.sp;
+    x -= 1; // ?????????????????????
     *x = *x ^ *y;
     return x;
 }
 
-void* op_clone(void* sp, FILE* fd, int* error) {
-    uint64_t* x = sp;
-    uint64_t* y = sp;
-    x += sizeof(uint64_t); // ?????????????????????
+void* op_clone(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    uint64_t* x = arg.sp;
+    uint64_t* y = arg.sp;
+    x += 1; // ?????????????????????
     *x = *y;
     return x;
 }
 
-void* op_take(void* sp, FILE* fd, int* error) {
-    uint64_t** value_ptr = sp;
-    uint64_t* value = sp;
+void* op_take(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    uint64_t** value_ptr = (uint64_t**)arg.sp;
+    uint64_t* value = arg.sp;
     *value = **value_ptr;
-    return sp;
+    return arg.ptr;
 }
 
-void* op_fp_add(void* sp, FILE* fd, int* error) {
-    double* x = sp;
-    double* y = sp;
+void* op_fp_add(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    double* x = arg.sp_f64;
+    double* y = arg.sp_f64;
     x -= 1; // ?????????????????????
     (*x) = (*x) + (*y);
     return x;
 }
 
-void* op_fp_sub(void* sp, FILE* fd, int* error) {
-    double* x = sp;
-    double* y = sp;
+void* op_fp_sub(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    double* x = arg.sp_f64;
+    double* y = arg.sp_f64;
     x -= 1; // ?????????????????????
     (*x) = (*x) - (*y);
     return x;
 }
 
-void* op_fp_mul(void* sp, FILE* fd, int* error) {
-    double* x = sp;
-    double* y = sp;
-    x -= sizeof(double); // ?????????????????????
+void* op_fp_mul(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    double* x = arg.sp_f64;
+    double* y = arg.sp_f64;
+    x -= 1;
     (*x) = (*x) * (*y);
     return x;
 }
 
-void* op_fp_div(void* sp, FILE* fd, int* error) {
-    double* x = sp;
-    double* y = sp;
-    x -= 1; // ?????????????????????
+void* op_fp_div(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    double* x = arg.sp_f64;
+    double* y = arg.sp_f64;
+    x -= 1;
     (*x) = (*x) / (*y);
     return x;
 }
 
-void* op_fp_power(void* sp, FILE* fd, int* error) {
-    double* x = sp;
-    double* y = sp;
-    x -= 1; // ?????????????????????
+void* op_fp_power(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    double* x = arg.sp_f64;
+    double* y = arg.sp_f64;
+    x -= 1;
     *x = pow(*x, *y);
     return x;
 }
 
-void* op_fp_ceil(void* sp, FILE* fd, int* error) {
-    double* x = sp;
+void* op_fp_ceil(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    double* x = arg.sp_f64;
     *x = ceil(*x);
-    return sp;
+    return arg.ptr;
 }
 
-void* op_fp_round(void* sp, FILE* fd, int* error) {
-    double* x = sp;
+void* op_fp_round(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    double* x = arg.sp_f64;
     *x = round(*x);
-    return sp;
+    return arg.ptr;
 }
 
-void* op_malloc(void* sp, FILE* fd, int* error) {
-    uint64_t* sp_u64 = sp;
-    *sp_u64 = (uint64_t)malloc(*sp_u64);
-    return sp;
+void* op_malloc(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    *arg.sp = (uint64_t)malloc(*arg.sp);
+    return arg.ptr;
 }
 
-void* op_load(void* sp, FILE* fd, int* error) {
-    void** sp_ptr = (void*)sp;
+void* op_load(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    void** sp_ptr = (void*)arg.ptr;
     uint64_t n = 0;
     int bytes = fread(&n, 8, 1, fd);
     if (bytes == 1) {
@@ -206,20 +203,20 @@ void* op_load(void* sp, FILE* fd, int* error) {
         fread(buffer, n, 1, fd);
         memcpy((void*)*sp_ptr, buffer, n);
     }
-    return sp;
+    return arg.ptr;
 }
 
-void* op_free(void* sp, FILE* fd, int* error) {
-    void* ptr = *((void**)sp);
+void* op_free(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    void* ptr = *((void**)arg.ptr);
     free(ptr);
-    return sp - sizeof(uint64_t);
+    return arg.ptr - sizeof(uint64_t);
 }
 
-void* op_omit(void* sp, FILE* fd, int* error) {
-    return sp - sizeof(int64_t);
+void* op_omit(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    return arg.sp - 1;
 }
 
-void* op_print_all(void* sp, FILE* fd, int* error) {
+void* op_print_all(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     /*
 } else if (c == COMMAND_PRINT_ALL) {
     uint64_t *ptr = vm.sp;
@@ -228,253 +225,240 @@ void* op_print_all(void* sp, FILE* fd, int* error) {
         ptr -= sizeof(uint64_t);
     } while(ptr != stack);
  */
-    return op_stub(sp, fd, error);
+    return op_stub(arg, fd, error);
 }
 
-void* op_left_shift(void* sp, FILE* fd, int* error) {
-   uint64_t* x = sp;
-    uint64_t* y = sp;
-    x -= sizeof(uint64_t); // ?????????????????????
+void* op_left_shift(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    uint64_t* x = arg.sp;
+    uint64_t* y = arg.sp;
+    x -= 1; // ?????????????????????
     *x = *x << *y;
     return x;
 }
 
-void* op_swap(void* sp, FILE* fd, int* error) {
-    uint64_t* x = sp;
-    uint64_t* y = sp;
-    x -= sizeof(uint64_t);
+void* op_swap(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    uint64_t* x = arg.sp;
+    uint64_t* y = arg.sp;
+    x -= 1;
 
     uint64_t value = *x;
     *x = *y;
     *y = value;
-    return sp;
+    return arg.ptr;
 }
 
-void* op_to_fp(void* sp, FILE* fd, int* error) {
-    uint64_t* x = sp;
-    double* result = sp;
+void* op_to_fp(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    uint64_t* x = arg.sp;
+    double* result = arg.sp_f64;
     *result = *x;
-    return sp;
+    return arg.ptr;
 }
 
-void* op_to_integer(void* sp, FILE* fd, int* error) {
-    int64_t* result = sp;
-    double* x = sp;
+void* op_to_integer(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    int64_t* result = arg.sp;
+    double* x = arg.sp_f64;
     *result = *x;
-    return sp;
+    return arg.ptr;
 }
 
-void* op_assert(void* sp, FILE* fd, int* error) {
-    uint64_t* x = (sp-sizeof(uint64_t));
-    uint64_t* y = sp;
-    uint64_t z = *x;
-    uint64_t t = *y;
-    if (z == t) {
-
-    } else {
-        printf("%ld != %ld\n", z, t);
+void* op_assert(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    uint64_t* x = arg.sp-1;
+    uint64_t* y = arg.sp;
+    if (*x != *y) {
+        printf("%ld != %ld\n", *x, *y);
         *error = -16;
     }
-    return sp;
+    return arg.ptr;
 }
 
-void* op_call(void* sp, FILE* fd, int* error) {
+void* op_call(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     long pos = ftell(fd) - 1;
     uint64_t offset;
 
     struct vm_state vm;
     vm.operand_size = sizeof(uint64_t);
-    vm.sp = sp;
+    vm.sp = arg.sp;
     int bytes = fread(&offset, 8, 1, fd);
     if (bytes == 1) {
         if (offset == 0) {
             *error = -6;
-            return sp;
+            return arg.ptr;
         }
 
         fseek(fd, pos + offset, SEEK_SET);
 
-        *error = ssvm_matrix_call(vm, fd, sp);
+        *error = ssvm_matrix_call(vm, fd, arg.sp);
         if (*error == -42) {
             *error = 0;
         }
         fseek(fd, pos + 9, SEEK_SET);
     }
-    return sp;
+    return arg.ptr;
 }
 
-void* op_ret(void* sp, FILE* fd, int* error) {
+void* op_ret(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     *error = -42;
-    return sp;
+    return arg.ptr;
 }
 
-void* op_jump(void* sp, FILE* fd, int* error) {
+void* op_jump(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     long pos = ftell(fd) - 1;
     uint64_t offset;
     int bytes = fread(&offset, 8, 1, fd);
     if (bytes == 1) {
         if (offset == 0) {
             *error = -6;
-            return sp;
+            return arg.ptr;
         }
         fseek(fd, pos + offset, SEEK_SET);
     }
-    return sp;
+    return arg.ptr;
 }
 
-void* op_jump_e(void* sp, FILE* fd, int* error) {
+void* op_jump_e(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     long pos = ftell(fd) - 1;
     uint64_t offset;
     int bytes = fread(&offset, 8, 1, fd);
     if (bytes == 1) {
-        int64_t* value_ptr = sp;
-        if (*value_ptr == 0) {
+        if (*arg.sp == 0) {
             if (offset == 0) {
                 *error = -6;
-                return sp;
+                return arg.ptr;
             }
             fseek(fd, pos + offset, SEEK_SET);
         }
     }
-    return sp;
+    return arg.ptr;
 }
 
-void* op_jump_ne(void* sp, FILE* fd, int* error) {
+void* op_jump_ne(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     long pos = ftell(fd) - 1;
     uint64_t offset;
     int bytes = fread(&offset, 8, 1, fd);
     if (bytes == 1) {
-        int64_t* value_ptr = sp;
-        if (*value_ptr != 0) {
+        if (*arg.sp != 0) {
             if (offset == 0) {
                 *error = -6;
-                return sp;
+                return arg.ptr;
             }
             fseek(fd, pos + offset, SEEK_SET);
         }
     }
-    return sp;
+    return arg.ptr;
 }
 
-void* op_jump_g(void* sp, FILE* fd, int* error) {
+void* op_jump_g(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     long pos = ftell(fd) - 1;
     uint64_t offset;
     int bytes = fread(&offset, 8, 1, fd);
     if (bytes == 1) {
-        int64_t* value_ptr = sp;
-        if (*value_ptr > 0) {
+        if (*arg.sp > 0) {
             if (offset == 0) {
                 *error = -6;
-                return sp;
+                return arg.ptr;
             }
             fseek(fd, pos + offset, SEEK_SET);
         }
     }
-    return sp;
+    return arg.ptr;
 }
 
-void* op_jump_ge(void* sp, FILE* fd, int* error) {
+void* op_jump_ge(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     long pos = ftell(fd) - 1;
     uint64_t offset;
     int bytes = fread(&offset, 8, 1, fd);
     if (bytes == 1) {
-        int64_t* value_ptr = sp;
-        if (*value_ptr >= 0) {
+        if (*arg.sp >= 0) {
             if (offset == 0) {
                 *error = -6;
-                return sp;
+                return arg.ptr;
             }
             fseek(fd, pos + offset, SEEK_SET);
         }
     }
-    return sp;
+    return arg.ptr;
 }
 
-void* op_jump_l(void* sp, FILE* fd, int* error) {
+void* op_jump_l(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     long pos = ftell(fd) - 1;
     uint64_t offset;
     int bytes = fread(&offset, 8, 1, fd);
     if (bytes == 1) {
-        int64_t* value_ptr = sp;
-        if (*value_ptr < 0) {
+        if (*arg.sp < 0) {
             if (offset == 0) {
                 *error = -6;
-                return sp;
+                return arg.ptr;
             }
             fseek(fd, pos + offset, SEEK_SET);
         }
     }
-    return sp;
+    return arg.ptr;
 }
 
-void* op_jump_le(void* sp, FILE* fd, int* error) {
+void* op_jump_le(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     long pos = ftell(fd) - 1;
     uint64_t offset;
     int bytes = fread(&offset, 8, 1, fd);
     if (bytes == 1) {
-        int64_t* value_ptr = sp;
-        if (*value_ptr <= 0) {
+        if (*arg.sp <= 0) {
             if (offset == 0) {
                 *error = -6;
-                return sp;
+                return arg.ptr;
             }
             fseek(fd, pos + offset, SEEK_SET);
         }
     }
-    return sp;
+    return arg.ptr;
 }
 
-void* op_read_char(void* sp, FILE* fd, int* error) {
-    sp += sizeof(uint64_t);
-    int64_t* char_ptr = sp;
+void* op_read_char(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    arg.sp += 1;
+    int64_t* char_ptr = arg.sp;
     *char_ptr = getchar();
-    return sp;
+    return arg.ptr;
 }
 
-void* op_read_integer(void* sp, FILE* fd, int* error) {
-    uint64_t* usp = sp;
-    usp += sizeof(uint64_t);
-    scanf("%ld", usp);
-    return usp;
+void* op_read_integer(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    arg.sp += 1;
+    scanf("%ld", arg.sp);
+    return arg.sp;
 }
 
-void* op_read_floating(void* sp, FILE* fd, int* error) {
-    sp += sizeof(uint64_t);
-    scanf("%lf", sp);
-    return sp;
+void* op_read_floating(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    arg.sp_f64 += 1;
+    scanf("%lf", arg.sp_f64);
+    return arg.ptr;
 }
 
-void* op_read_binary_integer(void* sp, FILE* fd, int* error) {
-    sp += sizeof(uint64_t);
-    fread(sp, sizeof(uint64_t), 1, fd);
-    return sp;
+void* op_read_binary_integer(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    arg.sp += 1;
+    fread(arg.sp, sizeof(uint64_t), 1, fd);
+    return arg.ptr;
 }
 
-void* op_read_binary_floating(void* sp, FILE* fd, int* error) {
-    sp += sizeof(uint64_t);
-    fread(sp, sizeof(uint64_t), 1, fd);
-    return sp;
+void* op_read_binary_floating(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    arg.sp_f64 += 1;
+    fread(arg.sp_f64, sizeof(uint64_t), 1, fd);
+    return arg.ptr;
 }
 
-void* op_print_string(void* sp, FILE* fd, int* error) {
-    char** str_ptr = sp;
-    printf("%s", *str_ptr);
-    return sp;
+void* op_print_string(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    printf("%s", (char*)*arg.sp);
+    return arg.ptr;
 }
 
-void* op_print_char(void* sp, FILE* fd, int* error) {
-    char* char_ptr = sp;
+void* op_print_char(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    char* char_ptr = (char*)arg.sp;
     putchar(*char_ptr);
-    return sp;
+    return arg.ptr;
 }
 
-void* op_compare_fp(void* sp, FILE* fd, int* error) {
-    double* usp = sp;
+void* op_compare_fp(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     uint64_t value = 0;
     // char equal = *(vm.sp_f64-1) == *vm.sp_f64;
-    char greater = *(usp-1) > *usp;
-    char less = *(usp-1) < *usp;
-    char not_equal = *(usp-1) != *usp;
+    char greater = *(arg.sp_f64-1) > *arg.sp_f64;
+    char less = *(arg.sp_f64-1) < *arg.sp_f64;
+    char not_equal = *(arg.sp_f64-1) != *arg.sp_f64;
 
     value = not_equal | (greater << 1) | (less << 2);
     // Equal - 0
@@ -484,36 +468,35 @@ void* op_compare_fp(void* sp, FILE* fd, int* error) {
 
     // NaN != NaN -> 1
     // NaN != x -> 1
-    usp += 1;
-    uint64_t* ret = (uint64_t*)usp;
-    *ret = value;
-    return usp;
+    arg.sp += 1;
+    *arg.sp = value;
+    return arg.sp;
 }
 
-void* op_eof(void* sp, FILE* fd, int* error) {
-    int64_t* result = sp;
+void* op_eof(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    int64_t* result = arg.sp;
     *result = feof(stdin);
-    return sp;
+    return arg.ptr;
 }
 
-void* op_is_nan(void* sp, FILE* fd, int* error) {
-    double* double_ptr = sp;
-    int64_t* result = sp;
+void* op_is_nan(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    double* double_ptr = arg.sp_f64;
+    int64_t* result = arg.sp;
     *result = isnan(*double_ptr);
-    return sp;
+    return arg.ptr;
 }
 
-void* op_stub(void* sp, FILE* fd, int* error) {
+void* op_stub(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     *error = -8;
-    return sp;
+    return arg.ptr;
 }
 
-void* op_not_implemented(void* sp, FILE* fd, int* error) {
+void* op_not_implemented(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     *error = -5;
-    return sp;
+    return arg.ptr;
 }
 
-void* op_unknown(void* sp, FILE* fd, int* error) {
+void* op_unknown(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     *error = -4;
-    return sp;
+    return arg.ptr;
 }
