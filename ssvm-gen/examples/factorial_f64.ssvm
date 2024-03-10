@@ -3,11 +3,7 @@ call factorial_fp
 print_fp
 jmp exit
 
-factorial_fp: pushf 0.0
-cmp_fp
-je factorial_one_fp
-omit
-omit
+factorial_fp: je_fp factorial_one_fp
 clone
 pushf 1.0
 sub_fp
@@ -16,8 +12,6 @@ mul_fp
 ret
 
 factorial_one_fp: omit
-omit
-omit
 pushf 1.0
 ret
 

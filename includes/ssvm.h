@@ -66,6 +66,13 @@
 #define COMMAND_EOF 0x89
 #define COMMAND_IS_NAN 0x8a
 
+#define COMMAND_JUMP_IF_ZERO_FP 0x8b
+// IF NON ZERO 0x8c
+// IF GREAT THAN ZERO 0x8d
+// IF LESS THAN ZERO 0x8e
+// IF NAN 0x8f
+// IF NOT NAN 0x90
+
 #ifdef __cplusplus
 extern "C" {
 #endif

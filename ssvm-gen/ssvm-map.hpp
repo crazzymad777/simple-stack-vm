@@ -53,7 +53,8 @@ std::map<std::string, int> opcodes = {
     {"print_char", COMMAND_PRINT_CHAR},
     {"cmp_fp", COMMAND_COMPARE_FP},
     {"eof", COMMAND_EOF},
-    {"is_nan", COMMAND_IS_NAN}
+    {"is_nan", COMMAND_IS_NAN},
+    {"je_fp", COMMAND_JUMP_IF_ZERO_FP}
 };
 
 std::map<int, int> opcodes_types = {
@@ -109,5 +110,6 @@ std::map<int, int> opcodes_types = {
     {COMMAND_PRINT_CHAR, 0},
     {COMMAND_COMPARE_FP, 0},
     {COMMAND_EOF, 0},
-    {COMMAND_IS_NAN, 0}
+    {COMMAND_IS_NAN, 0},
+    {COMMAND_JUMP_IF_ZERO_FP, 3},
 };
