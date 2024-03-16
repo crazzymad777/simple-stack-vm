@@ -67,11 +67,11 @@
 #define COMMAND_IS_NAN 0x8a
 
 #define COMMAND_JUMP_IF_ZERO_FP 0x8b
-// IF NON ZERO 0x8c
-// IF GREAT THAN ZERO 0x8d
-// IF LESS THAN ZERO 0x8e
-// IF NAN 0x8f
-// IF NOT NAN 0x90
+#define COMMAND_JUMP_IF_NON_ZERO_FP 0x8c
+#define COMMAND_JUMP_IF_GREAT_FP 0x8d
+#define COMMAND_JUMP_IF_LESS_FP 0x8e
+#define COMMAND_JUMP_IF_NAN 0x8f
+#define COMMAND_JUMP_IF_NOT_NAN 0x90
 
 #ifdef __cplusplus
 extern "C" {

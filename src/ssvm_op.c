@@ -495,6 +495,86 @@ void* op_jump_e_fp(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     return arg.ptr;
 }
 
+void* op_jump_ne_fp(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    long pos = ftell(fd) - 1;
+    uint64_t offset;
+    int bytes = fread(&offset, 8, 1, fd);
+    if (bytes == 1) {
+        if (*arg.sp_f64 != 0.0) {
+            if (offset == 0) {
+                *error = -6;
+                return arg.ptr;
+            }
+            fseek(fd, pos + offset, SEEK_SET);
+        }
+    }
+    return arg.ptr;
+}
+
+void* op_jump_g_fp(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    long pos = ftell(fd) - 1;
+    uint64_t offset;
+    int bytes = fread(&offset, 8, 1, fd);
+    if (bytes == 1) {
+        if (*arg.sp_f64 > 0.0) {
+            if (offset == 0) {
+                *error = -6;
+                return arg.ptr;
+            }
+            fseek(fd, pos + offset, SEEK_SET);
+        }
+    }
+    return arg.ptr;
+}
+
+void* op_jump_l_fp(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    long pos = ftell(fd) - 1;
+    uint64_t offset;
+    int bytes = fread(&offset, 8, 1, fd);
+    if (bytes == 1) {
+        if (*arg.sp_f64 < 0.0) {
+            if (offset == 0) {
+                *error = -6;
+                return arg.ptr;
+            }
+            fseek(fd, pos + offset, SEEK_SET);
+        }
+    }
+    return arg.ptr;
+}
+
+void* op_jump_nan_fp(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    long pos = ftell(fd) - 1;
+    uint64_t offset;
+    int bytes = fread(&offset, 8, 1, fd);
+    if (bytes == 1) {
+        if (isnan(*arg.sp_f64)) {
+            if (offset == 0) {
+                *error = -6;
+                return arg.ptr;
+            }
+            fseek(fd, pos + offset, SEEK_SET);
+        }
+    }
+    return arg.ptr;
+}
+
+void* op_jump_not_nan_fp(union ssvm_matrix_friend arg, FILE* fd, int* error) {
+    long pos = ftell(fd) - 1;
+    uint64_t offset;
+    int bytes = fread(&offset, 8, 1, fd);
+    if (bytes == 1) {
+        if (!isnan(*arg.sp_f64)) {
+            if (offset == 0) {
+                *error = -6;
+                return arg.ptr;
+            }
+            fseek(fd, pos + offset, SEEK_SET);
+        }
+    }
+    return arg.ptr;
+}
+
 void* op_stub(union ssvm_matrix_friend arg, FILE* fd, int* error) {
     *error = -8;
     return arg.ptr;

@@ -78,6 +78,11 @@ void* op_eof(union ssvm_matrix_friend arg, FILE* fd, int* error);
 void* op_is_nan(union ssvm_matrix_friend arg, FILE* fd, int* error);
 
 void* op_jump_e_fp(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_jump_ne_fp(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_jump_g_fp(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_jump_l_fp(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_jump_nan_fp(union ssvm_matrix_friend arg, FILE* fd, int* error);
+void* op_jump_not_nan_fp(union ssvm_matrix_friend arg, FILE* fd, int* error);
 
 void* op_stub(union ssvm_matrix_friend arg, FILE* fd, int* error);
 void* op_not_implemented(union ssvm_matrix_friend arg, FILE* fd, int* error);
@@ -149,7 +154,12 @@ ssvm_atom opcode_matrix[256] = {
     [COMMAND_EOF] = op_eof,
     [COMMAND_IS_NAN] = op_is_nan,
     [COMMAND_JUMP_IF_ZERO_FP] = op_jump_e_fp,
-    [(COMMAND_JUMP_IF_ZERO_FP + 1) ... 255] = op_unknown
+	[COMMAND_JUMP_IF_NON_ZERO_FP] = op_jump_ne_fp,
+	[COMMAND_JUMP_IF_GREAT_FP] = op_jump_g_fp,
+    [COMMAND_JUMP_IF_LESS_FP] = op_jump_l_fp,
+    [COMMAND_JUMP_IF_NAN] = op_jump_nan_fp,
+    [COMMAND_JUMP_IF_NOT_NAN] = op_jump_not_nan_fp,
+    [(COMMAND_JUMP_IF_NOT_NAN + 1) ... 255] = op_unknown
 };
 
 #endif
