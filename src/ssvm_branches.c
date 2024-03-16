@@ -304,6 +304,71 @@ int ssvm_branches_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 					fseek(fd, pos + offset, SEEK_SET);
 				}
 			}
+		} else if (c == COMMAND_JUMP_IF_NON_ZERO_FP) {
+			long pos = ftell(fd) - 1;
+			uint64_t offset;
+			int bytes = fread(&offset, 8, 1, fd);
+			if (bytes == 1) {
+				if (*vm.sp_f64 != 0.0) {
+					if (offset == 0) {
+						fprintf(stderr, "Simple Stack VM halt!\n");
+						return -6;
+					}
+					fseek(fd, pos + offset, SEEK_SET);
+				}
+			}
+		} else if (c == COMMAND_JUMP_IF_GREAT_FP) {
+			long pos = ftell(fd) - 1;
+			uint64_t offset;
+			int bytes = fread(&offset, 8, 1, fd);
+			if (bytes == 1) {
+				if (*vm.sp_f64 > 0.0) {
+					if (offset == 0) {
+						fprintf(stderr, "Simple Stack VM halt!\n");
+						return -6;
+					}
+					fseek(fd, pos + offset, SEEK_SET);
+				}
+			}
+		} else if (c == COMMAND_JUMP_IF_LESS_FP) {
+			long pos = ftell(fd) - 1;
+			uint64_t offset;
+			int bytes = fread(&offset, 8, 1, fd);
+			if (bytes == 1) {
+				if (*vm.sp_f64 < 0.0) {
+					if (offset == 0) {
+						fprintf(stderr, "Simple Stack VM halt!\n");
+						return -6;
+					}
+					fseek(fd, pos + offset, SEEK_SET);
+				}
+			}
+		} else if (c == COMMAND_JUMP_IF_NAN) {
+			long pos = ftell(fd) - 1;
+			uint64_t offset;
+			int bytes = fread(&offset, 8, 1, fd);
+			if (bytes == 1) {
+				if (isnan(*vm.sp_f64)) {
+					if (offset == 0) {
+						fprintf(stderr, "Simple Stack VM halt!\n");
+						return -6;
+					}
+					fseek(fd, pos + offset, SEEK_SET);
+				}
+			}
+		} else if (c == COMMAND_JUMP_IF_NOT_NAN) {
+			long pos = ftell(fd) - 1;
+			uint64_t offset;
+			int bytes = fread(&offset, 8, 1, fd);
+			if (bytes == 1) {
+				if (!isnan(*vm.sp_f64)) {
+					if (offset == 0) {
+						fprintf(stderr, "Simple Stack VM halt!\n");
+						return -6;
+					}
+					fseek(fd, pos + offset, SEEK_SET);
+				}
+			}
 		} else {
 			*vm_ptr = vm;
 			fprintf(stderr, "Error! Unknown opcode: 0x%x\n", c);
