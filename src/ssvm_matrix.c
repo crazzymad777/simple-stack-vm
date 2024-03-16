@@ -9,7 +9,15 @@ int ssvm_matrix_execute(struct vm_state* vm_ptr, FILE* fd, void* stack) {
 		int error_code = 0;
 		ssvm_atom fn = opcode_matrix[c];
 		vm.sp = fn((union ssvm_matrix_friend)vm.sp, fd, &error_code);
-		if (error_code != 0) {
+		if (error_code == SSVM_PRINT_ALL_CODE) {
+			uint64_t *ptr = vm.sp;
+			do {
+				printf("0x%x: 0x%x\n", vm.sp-ptr, *ptr);
+				ptr -= 1;
+			} while(ptr != stack);
+		}
+
+		if (error_code < 0) {
 			if (error_code == -4) {
 				fprintf(stderr, "Error! Unknown opcode: 0x%x\n", c);
 			} else if (error_code == -5) {

@@ -217,15 +217,8 @@ void* op_omit(union ssvm_matrix_friend arg, FILE* fd, int* error) {
 }
 
 void* op_print_all(union ssvm_matrix_friend arg, FILE* fd, int* error) {
-    /*
-} else if (c == COMMAND_PRINT_ALL) {
-    uint64_t *ptr = vm.sp;
-    do {
-        printf("0x%x: 0x%x\n", vm.sp-ptr, *ptr);
-        ptr -= sizeof(uint64_t);
-    } while(ptr != stack);
- */
-    return op_stub(arg, fd, error);
+	*error = SSVM_PRINT_ALL_CODE;
+    return arg.sp;
 }
 
 void* op_left_shift(union ssvm_matrix_friend arg, FILE* fd, int* error) {

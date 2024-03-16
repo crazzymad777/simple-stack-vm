@@ -7,4 +7,6 @@
 int ssvm_matrix_execute(struct vm_state* vm_ptr, FILE* fd, void* stack);
 int ssvm_matrix_call(struct vm_state vm, FILE* fd, void* stack);
 
+#define SSVM_PRINT_ALL_CODE 'j'
+
 #endif
